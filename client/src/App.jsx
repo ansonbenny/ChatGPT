@@ -3,23 +3,12 @@ import { Rocket } from "./assets"
 import { Chat, Menu, New } from "./components"
 
 const App = () => {
-  const [lightMode, setLightMode] = useState(false)
+  const [lightMode, setLightMode] = useState(true)
 
   const textAreaRef = useRef(null)
 
   const changeColorMode = () => {
     if (lightMode) {
-
-      document.body.classList.add("light")
-      document.body.classList.remove("dark")
-
-      let element = document.querySelectorAll('.currentColor')
-
-      element.forEach(ele => {
-        ele.style.color = "#343541"
-      })
-
-    } else {
 
       document.body.classList.add("dark")
       document.body.classList.remove("light")
@@ -30,6 +19,16 @@ const App = () => {
         ele.style.color = "#ECECF1"
       })
 
+    } else {
+
+      document.body.classList.add("light")
+      document.body.classList.remove("dark")
+
+      let element = document.querySelectorAll('.currentColor')
+
+      element.forEach(ele => {
+        ele.style.color = "#343541"
+      })
     }
 
     setLightMode(!lightMode)
@@ -45,7 +44,10 @@ const App = () => {
   return (
     <section className='main-grid'>
       <div>
-        <Menu changeColorMode={changeColorMode} />
+        <Menu
+          changeColorMode={changeColorMode}
+          lightMode={lightMode}
+        />
       </div>
 
       <div className="main">

@@ -1,7 +1,54 @@
 @import '../../index.scss';
 
+.light {
+    .New {
+        .card-bg {
+            background: rgba(247, 247, 248, 1);
+            border-radius: .375rem;
+            padding: .75rem;
+
+            p {
+                font-size: 14px;
+            }
+
+            &:is(.hover):hover {
+                background: rgba(236, 236, 241, 1);
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.dark {
+    .New {
+        .card-bg {
+            background: hsla(0, 0%, 100%, .05);
+            border-radius: .375rem;
+            padding: .75rem;
+
+            p {
+                font-size: 14px;
+            }
+
+            &:is(.hover):hover {
+                background: rgba(32, 33, 35, 1);
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 .New {
+    display: block;
+    padding-left: 12em;
+    padding-right: 12em;
     padding-top: 7em;
+    padding-bottom: 20vh;
+
+    @media only screen and (max-width: 1300px) {
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+    }
 
     .title {
         font-size: 2.25rem;
@@ -9,59 +56,39 @@
         margin-bottom: 2em;
     }
 
-    .grid {
-        display: grid;
-        grid-template-columns: 33.333333333% 33.333333333% 33.333333333%;
+    .flex {
+        display: flex;
+        flex-direction: row;
         gap: .875rem;
 
         @media screen and (max-width:767px) {
-            grid-template-columns: 100%;
+            flex-direction: column;
         }
 
         svg {
             width: 24px;
             height: 24px;
         }
+
+        .inner {
+            flex-basis: 100%;
+            display: flex;
+            flex-direction: column;
+
+            @media screen and (max-width:767px) {
+                flex-basis: 100%;
+            }
+
+            .card {
+                margin-bottom: 1em;
+
+                h4 {
+                    font-weight: 400;
+                    font-size: 1.125rem;
+                    line-height: 1.75rem;
+                }
+            }
+        }
+
     }
-
-    .card {
-        margin-bottom: 1em;
-
-        h4 {
-            font-weight: 400;
-            font-size: 1.125rem;
-            line-height: 1.75rem;
-        }
-    }
-
-    .card-bg-light {
-        background: rgba(247, 247, 248, 1);
-        border-radius: .375rem;
-        padding: .75rem;
-
-        p {
-            font-size: 14px;
-        }
-
-        &:is(.hover):hover {
-            background: rgba(236,236,241,1);
-            cursor: pointer;
-        }
-    }
-
-    .card-bg-dark {
-        background: hsla(0, 0%, 100%, .05);
-        border-radius: .375rem;
-        padding: .75rem;
-
-        p {
-            font-size: 14px;
-        }
-
-        &:is(.hover):hover {
-            background: rgba(32,33,35,1);
-            cursor: pointer;
-        }
-    }
-
 }

@@ -1,7 +1,13 @@
 .menu {
-    .menuBar {
-        width: 260px;
-        background: rgba(32, 33, 35, 1);
-        height: 100vh;
-      }
+  .menuBar {
+    position: fixed;
+    z-index: 1000;
+    width: 260px;
+    background: rgba(32, 33, 35, 1);
+    height: 100vh;
+
+    @media screen and (max-width:767px) {
+      display: none;
+    }
+  }
 }

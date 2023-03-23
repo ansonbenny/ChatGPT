@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Rocket } from "./assets"
 import { Chat, Menu, New } from "./components"
 
 const App = () => {
-  const [lightMode, setLightMode] = useState(true)
+  const [darkMode, setDarkMode] = useState(false)
 
   const textAreaRef = useRef(null)
 
-  const changeColorMode = () => {
-    if (lightMode) {
+  const changeColorMode = (to) => {
+    if (to) {
+      localStorage.setItem('darkMode', true)
 
       document.body.classList.add("dark")
       document.body.classList.remove("light")
@@ -21,6 +22,8 @@ const App = () => {
 
     } else {
 
+      localStorage.removeItem('darkMode')
+
       document.body.classList.add("light")
       document.body.classList.remove("dark")
 
@@ -31,8 +34,22 @@ const App = () => {
       })
     }
 
-    setLightMode(!lightMode)
+    setDarkMode(to)
   }
+
+  useLayoutEffect(() => {
+
+    let mode = localStorage.getItem('darkMode')
+
+    if (mode) {
+      setDarkMode(true)
+      changeColorMode(true)
+    } else {
+      setDarkMode(false)
+      changeColorMode(false)
+    }
+
+  }, [])
 
   useEffect(() => {
     textAreaRef.current.addEventListener('input', (e) => {
@@ -46,7 +63,7 @@ const App = () => {
       <div>
         <Menu
           changeColorMode={changeColorMode}
-          lightMode={lightMode}
+          darkMode={darkMode}
         />
       </div>
 

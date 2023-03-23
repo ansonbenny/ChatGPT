@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Sun, Thunder, Warning } from '../../assets'
 import './style.scss'
 
-const New = () => {
+const New = memo(() => {
   return (
     <div className='New'>
       <div>
@@ -72,6 +72,6 @@ const New = () => {
       </div>
     </div>
   )
-}
+})
 
 export default New

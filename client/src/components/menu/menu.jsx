@@ -5,14 +5,13 @@ import {
 } from '../../assets/'
 import './style.scss'
 
-const Menu = ({ changeColorMode, lightMode }) => {
+const Menu = ({ changeColorMode, darkMode }) => {
   const menuRef = useRef(null)
   const btnRef = useRef(null)
 
   const showMenuMd = () => {
     menuRef.current.classList.add("showMd")
   }
-
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
@@ -74,8 +73,8 @@ const Menu = ({ changeColorMode, lightMode }) => {
           <button>{<Trash />}Clear conversations</button>
           <button>{<Avatar />}Upgrade to Plus <span>New</span></button>
           {
-            lightMode ? <button onClick={changeColorMode}><Moon />Dark mode</button>
-              : <button onClick={changeColorMode}><Light />Light mode</button>
+            !darkMode ? <button onClick={() => changeColorMode(true)}><Moon />Dark mode</button>
+              : <button onClick={() => changeColorMode(false)}><Light />Light mode</button>
           }
           <button>{<Tab />}Updates & FAQ</button>
           <button>{<LogOut />}Log out</button>

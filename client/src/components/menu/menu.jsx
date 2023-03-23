@@ -1,5 +1,8 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { Avatar, Bar, Light, LogOut, Moon, Plus, Tab, Xicon } from '../../assets/'
+import React, { Fragment, useEffect, useRef } from 'react'
+import {
+  Avatar, Bar, Light, LogOut, Message,
+  Moon, Plus, Tab, Trash, Xicon
+} from '../../assets/'
 import './style.scss'
 
 const Menu = ({ changeColorMode, lightMode }) => {
@@ -37,21 +40,38 @@ const Menu = ({ changeColorMode, lightMode }) => {
       </header>
 
       <div className="menu" ref={menuRef}>
-        <div className="top">
+        <div>
           <button
             type='button'
             aria-label='new'
           >
             {<Plus />}New Chat
           </button>
-
         </div>
 
         <div className="history">
-
+          <button>{<Message />}
+            Clear conversationsaaaaaaaaaaaaaaaaaa
+          </button>
+          <button>{<Message />}Upgrade to Plus <span>New</span></button>
+          <button>{<Message />}Updates & FAQ</button>
+          <button>{<Message />}Log out</button>
+          <button>{<Message />}Clear conversations</button>
+          <button>{<Message />}Upgrade to Plus <span>New</span></button>
+          <button>{<Message />}Updates & FAQ</button>
+          <button>{<Message />}Log out</button>
+          <button>{<Message />}Clear conversations</button>
+          <button>{<Message />}Upgrade to Plus <span>New</span></button>
+          <button>{<Message />}Updates & FAQ</button>
+          <button>{<Message />}Log out</button>
+          <button>{<Message />}Clear conversations</button>
+          <button>{<Message />}Upgrade to Plus <span>New</span></button>
+          <button>{<Message />}Updates & FAQ</button>
+          <button>{<Message />}Log out</button>
         </div>
 
-        <div className="bottom">
+        <div className="actions">
+          <button>{<Trash />}Clear conversations</button>
           <button>{<Avatar />}Upgrade to Plus <span>New</span></button>
           {
             lightMode ? <button onClick={changeColorMode}><Moon />Dark mode</button>

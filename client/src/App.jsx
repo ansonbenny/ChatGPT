@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { Rocket } from "./assets"
+import { Reload, Rocket, Stop } from "./assets"
 import { Chat, Menu, New } from "./components"
 
 const App = () => {
@@ -70,16 +70,49 @@ const App = () => {
       <div className="main">
 
         <div className="contentArea">
-          <New />
+          {
+            true ? <Chat /> : <New />
+          }
         </div>
 
         <div className='inputArea'>
 
-          <div className="box">
-            <div className="flex">
+          <div className="chatActionsLg">
+            {
+              true ? <button><Reload /> Regerate response</button>
+                : <button><Stop /> Stop generating</button>
+            }
+          </div>
+
+          <div className="flexBody">
+            <div className="box">
               <textarea ref={textAreaRef} />
-              <button>{<Rocket />}</button>
+              {
+                true ? <button>{<Rocket />}</button>
+                  : (
+                    <div className="loading">
+                      <div className="dot" />
+                      <div className="dot-2 dot" />
+                      <div className="dot-3 dot" />
+                    </div>
+                  )
+              }
             </div>
+
+            {
+              false && (
+                <>
+                  {
+                    true ? <div className="chatActionsMd">
+                      <button><Reload /></button>
+                    </div>
+                      : <div className="chatActionsMd">
+                        <button><Stop /></button>
+                      </div>
+                  }
+                </>
+              )
+            }
           </div>
 
           <div className="text">

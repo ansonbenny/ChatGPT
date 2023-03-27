@@ -1,4 +1,36 @@
+@keyframes sendingDot2 {
+  0% {
+    background: transparent;
+  }
+
+  50% {
+    background: #8E8E40;
+  }
+
+  100% {
+    background: #8E8E40;
+  }
+}
+
+@keyframes sendingDot3 {
+  0% {
+    background: transparent;
+  }
+
+  50% {
+    background: transparent;
+  }
+
+  100% {
+    background: #8E8E40;
+  }
+}
+
 $ColorBlack : #343541;
+
+html {
+  scroll-behavior: smooth;
+}
 
 * {
   margin: 0;
@@ -6,10 +38,12 @@ $ColorBlack : #343541;
 }
 
 body {
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
+  // scroll start
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -28,9 +62,13 @@ body {
     border-radius: 30px;
   }
 
+  //scroll end
+
   &:is(.light) {
+    // body background
     background: white;
 
+    // input area
     .inputArea {
       background-image: linear-gradient(180deg, hsla(0, 0%, 100%, 0) 13.94%, #fff 54.73%);
 
@@ -40,7 +78,29 @@ body {
         background: rgba(255, 255, 255, 1);
       }
 
-      .box .flex {
+      .chatActionsLg button {
+        background: rgba(255, 255, 255, 1);
+        color: rgba(64, 65, 79, 1);
+        border: 1px solid rgba(0, 0, 0, .1);
+
+        svg {
+          color: rgba(64, 65, 79, 1);
+        }
+
+        &:hover {
+          background: rgba(236, 236, 241, 1);
+        }
+      }
+
+      .chatActionsMd button {
+        color: rgba(64, 65, 79, 1);
+
+        &:hover {
+          background: rgba(236, 236, 241, 1);
+        }
+      }
+
+      .box {
         border: 1px solid rgba(0, 0, 0, .1);
         box-shadow: 0 0 10px rgba(0, 0, 0, .1);
         background: #FFFFFF;
@@ -60,6 +120,7 @@ body {
       }
 
       .text {
+        //background: rgba(255, 255, 255, 1);
         color: rgba(0, 0, 0, .5);
 
         a {
@@ -71,8 +132,10 @@ body {
   }
 
   &:is(.dark) {
+    // body background
     background: rgba(52, 53, 65, 1);
 
+    // input area
     .inputArea {
       background-image: linear-gradient(180deg, rgba(53, 55, 64, 0), #353740 58.85%);
 
@@ -82,7 +145,29 @@ body {
         background: rgba(52, 53, 65, 1);
       }
 
-      .box .flex {
+      .chatActionsLg button {
+        color: #D9D9E3;
+        background-color: rgba(52, 53, 65, 1);
+        border: 1px solid rgba(86, 88, 105, 1);
+
+        svg {
+          color: #D9D9E3;
+        }
+
+        &:hover {
+          background: rgba(64, 65, 79, 1);
+        }
+      }
+
+      .chatActionsMd button {
+        color: white;
+
+        &:hover {
+          background: #40414f;
+        }
+      }
+
+      .box {
         border: 1px solid rgba(32, 33, 35, .5);
         box-shadow: 0 0 15px rgba(0, 0, 0, .1);
         background: #40414f;
@@ -102,6 +187,7 @@ body {
       }
 
       .text {
+        //background: rgba(52, 53, 65, 1);
         color: hsla(0, 0%, 100%, .5);
 
         a {
@@ -149,23 +235,79 @@ body {
       width: 100% !important;
     }
 
-    .box {
-      background: transparent;
+    .chatActionsLg {
+      padding-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      button {
+        position: relative;
+        font-size: .875rem;
+        line-height: 1.25rem;
+        padding: .5rem .75rem;
+        padding-left: 1.85rem;
+        border-radius: 3px;
+        cursor: pointer;
+
+        svg {
+          left: .75rem;
+          padding-top: .25rem;
+          position: absolute;
+          width: .75rem;
+          height: .75rem;
+        }
+      }
+
+      @media screen and (max-width:767px) {
+        display: none;
+      }
+    }
+
+    .flexBody {
+      display: flex;
+      flex-direction: row;
       padding-left: 10em;
       padding-right: 10em;
       padding-top: 0.5em;
+      background: transparent;
 
       @media only screen and (max-width: 1300px) {
+        padding-left: 3em;
+        padding-right: 3em;
+      }
+
+      @media only screen and (max-width: 1000px) {
         padding-left: 1em;
         padding-right: 1em;
       }
 
-      @media screen and (max-width:767px) {
-        padding-left: 0.5em;
-        padding-right: 0.5em;
+      @media only screen and (max-width: 767px) {
+        padding-left: .5em;
+        padding-right: .5em;
       }
 
-      .flex {
+      .chatActionsMd {
+        display: none;
+
+        @media only screen and (max-width: 767px) {
+          display: block;
+          padding-left: .5em;
+
+          button {
+            padding: 0 1rem;
+            height: 100%;
+            border-radius: .25rem;
+            font-size: .875rem;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+          }
+        }
+      }
+
+      .box {
+        width: 100%;
         display: flex;
         flex-direction: row;
         position: relative;
@@ -217,8 +359,35 @@ body {
           }
         }
 
-      }
+        .loading {
+          display: flex;
+          gap: 2px;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          background: transparent;
+          padding: .25rem;
+          margin-right: 10px;
+          margin-bottom: 5px;
 
+          .dot {
+            width: 3px;
+            height: 3px;
+            background: #8E8E40;
+            border-radius: 50%;
+            border: none;
+          }
+
+          .dot-2 {
+            animation: sendingDot2 1s ease-in-out infinite;
+          }
+
+          .dot-3 {
+            animation: sendingDot3 1s ease-in-out infinite;
+          }
+        }
+
+      }
     }
 
     .text {

@@ -17,6 +17,26 @@
             }
         }
     }
+
+    .Chat {
+        .qs {
+            background: white;
+
+            .txt {
+                color: #343541;
+            }
+        }
+
+        .res {
+            border-top: 1px solid #d9d9e3;
+            border-bottom: 1px solid #d9d9e3;
+            background: rgba(247, 247, 248, 1);
+
+            .txt {
+                color: #374151;
+            }
+        }
+    }
 }
 
 .dark {
@@ -36,6 +56,26 @@
             }
         }
     }
+
+    .Chat {
+        .qs {
+            background: rgba(52, 53, 65, 1);
+
+            .txt {
+                color: #ECECF1;
+            }
+        }
+
+        .res {
+            background: #444654;
+            border-top: 1px solid rgba(32,33,35,.5);
+            border-bottom: 1px solid rgba(32,33,35,.5);
+
+            .txt {
+                color: #D1D5DB;
+            }
+        }
+    }
 }
 
 .New {
@@ -46,6 +86,11 @@
     padding-bottom: 12rem;
 
     @media only screen and (max-width: 1300px) {
+        padding-left: 5em;
+        padding-right: 5em;
+    }
+
+    @media only screen and (max-width: 1000px) {
         padding-left: 1.5em;
         padding-right: 1.5em;
     }
@@ -90,5 +135,109 @@
             }
         }
 
+    }
+}
+
+.Chat {
+    display: block;
+    text-align: left;
+    padding-bottom: 12rem;
+
+    .qs {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        padding-left: 10em;
+        padding-right: 12em;
+        display: grid;
+        grid-template-columns: calc(30px + 1.5rem) auto;
+
+        @media only screen and (max-width: 1300px) {
+            padding-left: 5em;
+            padding-right: 5em;
+        }
+
+        @media only screen and (max-width: 1000px) {
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+
+        @media only screen and (max-width: 767px) {
+            padding-top: 4rem;
+            grid-template-columns: calc(30px + 1rem) auto;
+        }
+
+        .acc {
+            display: flex;
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: green;
+            color: white;
+            justify-content: center;
+            align-items: center;
+            border-radius: 2px;
+            font-weight: 500;
+            margin-right: 1.5rem;
+
+            @media only screen and (max-width: 767px) {
+                margin-right: 1rem;
+            }
+        }
+
+        .txt {
+            line-height: 1.5rem;
+            font-size: 1rem;
+        }
+    }
+
+    .res {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        padding-left: 10em;
+        padding-right: 12em;
+        display: grid;
+        grid-template-columns: calc(30px + 1.5rem) auto;
+
+        @media only screen and (max-width: 1300px) {
+            padding-left: 5em;
+            padding-right: 5em;
+        }
+
+        @media only screen and (max-width: 1000px) {
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+
+        @media only screen and (max-width: 767px) {
+            grid-template-columns: calc(30px + 1rem) auto;
+        }
+
+        .icon {
+            display: flex;
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: rgb(16, 163, 127);
+            justify-content: center;
+            align-items: center;
+            border-radius: 2px;
+            font-weight: 500;
+            margin-right: 1.5rem;
+
+            @media only screen and (max-width: 767px) {
+                margin-right: 1rem;
+            }
+
+            svg {
+                width: 1.5rem;
+                height: 1.5rem;
+                color: white;
+            }
+        }
+
+        .txt {
+            line-height: 1.5rem;
+            font-size: 1rem;
+        }
     }
 }

@@ -11,6 +11,7 @@ const Menu = ({ changeColorMode, darkMode }) => {
 
   const showMenuMd = () => {
     menuRef.current.classList.add("showMd")
+    document.body.style.overflowY = "hidden"
   }
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const Menu = ({ changeColorMode, darkMode }) => {
       if (!menuRef?.current?.contains(e.target)
         && !btnRef?.current?.contains(e.target)) {
         menuRef.current.classList.remove("showMd")
+        document.body.style.overflowY = "auto"
       }
     })
   })

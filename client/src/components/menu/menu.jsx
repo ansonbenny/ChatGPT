@@ -4,10 +4,13 @@ import {
   Moon, Plus, Tab, Trash, Xicon
 } from '../../assets/'
 import './style.scss'
+import { useNavigate } from 'react-router-dom'
 
 const Menu = ({ changeColorMode, darkMode }) => {
   const menuRef = useRef(null)
   const btnRef = useRef(null)
+
+  const navigate = useNavigate()
 
   const showMenuMd = () => {
     menuRef.current.classList.add("showMd")
@@ -18,8 +21,20 @@ const Menu = ({ changeColorMode, darkMode }) => {
     window.addEventListener('click', (e) => {
       if (!menuRef?.current?.contains(e.target)
         && !btnRef?.current?.contains(e.target)) {
-        menuRef.current.classList.remove("showMd")
+        menuRef.current.classList?.remove("showMd")
         document.body.style.overflowY = "auto"
+      }
+    })
+
+    window.addEventListener('resize', () => {
+      if (!window.matchMedia("(max-width:767px)").matches) {
+        document.body.style.overflowY = "auto"
+      } else {
+        if (menuRef.current.classList.contains('showMd')) {
+          document.body.style.overflowY = "hidden"
+        } else {
+          document.body.style.overflowY = "auto"
+        }
       }
     })
   })
@@ -45,16 +60,27 @@ const Menu = ({ changeColorMode, darkMode }) => {
           <button
             type='button'
             aria-label='new'
+            onClick={() => {
+              navigate('/')
+            }}
           >
             {<Plus />}New Chat
           </button>
         </div>
 
         <div className="history">
-          <button>{<Message />}
+          <button
+            onClick={() => {
+              navigate('/chat/sample')
+            }}
+          >{<Message />}
             Clear conversationsaaaaaaaaaaaaaaaaaa
           </button>
-          <button>{<Message />}Upgrade to Plus <span>New</span></button>
+          <button
+            onClick={() => {
+              navigate('/chat/sample')
+            }}
+          >{<Message />}Upgrade to Plus <span>New</span></button>
           <button>{<Message />}Updates & FAQ</button>
           <button>{<Message />}Log out</button>
           <button>{<Message />}Clear conversations</button>

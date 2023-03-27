@@ -78,7 +78,7 @@ header {
 
     .end {
       text-align: right;
-      padding-right: 0.9em;
+      padding-right: .5em;
     }
   }
 }
@@ -157,6 +157,10 @@ header {
     &::-webkit-scrollbar-thumb {
       background: rgba(86, 88, 105, 1);
       border-radius: 30px;
+
+      &:hover {
+        background: rgba(172, 172, 190, 1);
+      }
     }
 
     button {

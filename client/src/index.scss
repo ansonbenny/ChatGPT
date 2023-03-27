@@ -1,31 +1,3 @@
-@keyframes sendingDot2 {
-  0% {
-    background: transparent;
-  }
-
-  50% {
-    background: #8E8E40;
-  }
-
-  100% {
-    background: #8E8E40;
-  }
-}
-
-@keyframes sendingDot3 {
-  0% {
-    background: transparent;
-  }
-
-  50% {
-    background: transparent;
-  }
-
-  100% {
-    background: #8E8E40;
-  }
-}
-
 $ColorBlack : #343541;
 
 html {
@@ -43,7 +15,8 @@ body {
   overflow-x: hidden;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
-  // scroll start
+  // scroll start;
+
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -53,13 +26,21 @@ body {
   }
 
   &:is(.light)::-webkit-scrollbar-thumb {
-    background: rgba(236, 236, 241, 1);
+    background: rgba(217, 217, 227, .8);
     border-radius: 30px;
+
+    &:hover {
+      background: rgba(236, 236, 241, 1);
+    }
   }
 
   &:is(.dark)::-webkit-scrollbar-thumb {
     background: rgba(86, 88, 105, 1);
     border-radius: 30px;
+
+    &:hover {
+      background: rgba(172, 172, 190, 1);
+    }
   }
 
   //scroll end
@@ -68,66 +49,8 @@ body {
     // body background
     background: white;
 
-    // input area
-    .inputArea {
-      background-image: linear-gradient(180deg, hsla(0, 0%, 100%, 0) 13.94%, #fff 54.73%);
-
-      @media screen and (max-width:767px) {
-        border-top: 1px solid #d9d9e3;
-        background-image: none;
-        background: rgba(255, 255, 255, 1);
-      }
-
-      .chatActionsLg button {
-        background: rgba(255, 255, 255, 1);
-        color: rgba(64, 65, 79, 1);
-        border: 1px solid rgba(0, 0, 0, .1);
-
-        svg {
-          color: rgba(64, 65, 79, 1);
-        }
-
-        &:hover {
-          background: rgba(236, 236, 241, 1);
-        }
-      }
-
-      .chatActionsMd button {
-        color: rgba(64, 65, 79, 1);
-
-        &:hover {
-          background: rgba(236, 236, 241, 1);
-        }
-      }
-
-      .box {
-        border: 1px solid rgba(0, 0, 0, .1);
-        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-        background: #FFFFFF;
-
-        textarea {
-          color: #333;
-
-          &::-webkit-scrollbar-thumb {
-            background: rgba(236, 236, 241, 1);
-            border-radius: 30px;
-          }
-        }
-
-        button:hover {
-          background: #d9d9e3;
-        }
-      }
-
-      .text {
-        //background: rgba(255, 255, 255, 1);
-        color: rgba(0, 0, 0, .5);
-
-        a {
-          color: rgba(0, 0, 0, .5);
-          text-decoration-color: rgba(0, 0, 0, .5);
-        }
-      }
+    .currentColor {
+      color: $ColorBlack;
     }
   }
 
@@ -135,72 +58,10 @@ body {
     // body background
     background: rgba(52, 53, 65, 1);
 
-    // input area
-    .inputArea {
-      background-image: linear-gradient(180deg, rgba(53, 55, 64, 0), #353740 58.85%);
-
-      @media screen and (max-width:767px) {
-        border-top: 1px solid hsla(0, 0%, 100%, .2);
-        background-image: none;
-        background: rgba(52, 53, 65, 1);
-      }
-
-      .chatActionsLg button {
-        color: #D9D9E3;
-        background-color: rgba(52, 53, 65, 1);
-        border: 1px solid rgba(86, 88, 105, 1);
-
-        svg {
-          color: #D9D9E3;
-        }
-
-        &:hover {
-          background: rgba(64, 65, 79, 1);
-        }
-      }
-
-      .chatActionsMd button {
-        color: white;
-
-        &:hover {
-          background: #40414f;
-        }
-      }
-
-      .box {
-        border: 1px solid rgba(32, 33, 35, .5);
-        box-shadow: 0 0 15px rgba(0, 0, 0, .1);
-        background: #40414f;
-
-        textarea {
-          color: white;
-
-          &::-webkit-scrollbar-thumb {
-            background: rgba(86, 88, 105, 1);
-            border-radius: 30px;
-          }
-        }
-
-        button:hover {
-          background: rgba(32, 33, 35, 1);
-        }
-      }
-
-      .text {
-        //background: rgba(52, 53, 65, 1);
-        color: hsla(0, 0%, 100%, .5);
-
-        a {
-          color: hsla(0, 0%, 100%, .5);
-          text-decoration-color: hsla(0, 0%, 100%, .5);
-        }
-      }
+    .currentColor {
+      color: #ECECF1;
     }
   }
-}
-
-.currentColor {
-  color: $ColorBlack;
 }
 
 .main-grid {
@@ -209,204 +70,5 @@ body {
 
   @media screen and (max-width:767px) {
     grid-template-columns: 100%;
-  }
-}
-
-.main {
-  width: 100%;
-  display: block;
-  position: relative;
-
-  .contentArea {
-    height: auto;
-    align-items: center;
-    text-align: center;
-  }
-
-  .inputArea {
-    position: fixed;
-    z-index: 1000;
-    bottom: 0;
-    height: auto;
-    min-height: 17%;
-    width: calc(100vw - 260px) !important;
-
-    @media screen and (max-width:767px) {
-      width: 100% !important;
-    }
-
-    .chatActionsLg {
-      padding-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      button {
-        position: relative;
-        font-size: .875rem;
-        line-height: 1.25rem;
-        padding: .5rem .75rem;
-        padding-left: 1.85rem;
-        border-radius: 3px;
-        cursor: pointer;
-
-        svg {
-          left: .75rem;
-          padding-top: .25rem;
-          position: absolute;
-          width: .75rem;
-          height: .75rem;
-        }
-      }
-
-      @media screen and (max-width:767px) {
-        display: none;
-      }
-    }
-
-    .flexBody {
-      display: flex;
-      flex-direction: row;
-      padding-left: 10em;
-      padding-right: 10em;
-      padding-top: 0.5em;
-      background: transparent;
-
-      @media only screen and (max-width: 1300px) {
-        padding-left: 3em;
-        padding-right: 3em;
-      }
-
-      @media only screen and (max-width: 1000px) {
-        padding-left: 1em;
-        padding-right: 1em;
-      }
-
-      @media only screen and (max-width: 767px) {
-        padding-left: .5em;
-        padding-right: .5em;
-      }
-
-      .chatActionsMd {
-        display: none;
-
-        @media only screen and (max-width: 767px) {
-          display: block;
-          padding-left: .5em;
-
-          button {
-            padding: 0 1rem;
-            height: 100%;
-            border-radius: .25rem;
-            font-size: .875rem;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-          }
-        }
-      }
-
-      .box {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        position: relative;
-        border-radius: .375rem;
-        padding-top: 1rem;
-
-        textarea {
-          outline: none;
-          border-bottom-left-radius: .375rem;
-          border-top-left-radius: .375rem;
-          width: 100%;
-          height: 30px;
-          outline: none;
-          border: none;
-          padding-left: 1rem;
-          padding-right: calc(9% + 2px);
-          background: transparent;
-          resize: none;
-          font-weight: normal;
-          overflow-y: auto;
-          max-height: 12em;
-
-          &::-webkit-scrollbar {
-            width: 8px;
-          }
-
-          &::-webkit-scrollbar-track {
-            background: transparent;
-          }
-        }
-
-        button {
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          border: none;
-          outline: none;
-          background: transparent;
-          padding: .25rem;
-          border-radius: .375rem;
-          margin-right: 10px;
-          margin-bottom: 5px;
-          cursor: pointer;
-
-          svg {
-            width: 16px;
-            height: 16px;
-            color: rgba(142, 142, 160, 1);
-          }
-        }
-
-        .loading {
-          display: flex;
-          gap: 2px;
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          background: transparent;
-          padding: .25rem;
-          margin-right: 10px;
-          margin-bottom: 5px;
-
-          .dot {
-            width: 3px;
-            height: 3px;
-            background: #8E8E40;
-            border-radius: 50%;
-            border: none;
-          }
-
-          .dot-2 {
-            animation: sendingDot2 1s ease-in-out infinite;
-          }
-
-          .dot-3 {
-            animation: sendingDot3 1s ease-in-out infinite;
-          }
-        }
-
-      }
-    }
-
-    .text {
-      padding-top: 0.75rem;
-      padding-bottom: 1.5rem;
-      padding-left: 8rem;
-      padding-right: 8rem;
-      font-size: .75rem;
-      color: rgba(0, 0, 0, .5);
-      line-height: 1rem;
-
-      a {
-        font-size: .75rem;
-      }
-
-      @media screen and (max-width:1300px) {
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-    }
   }
 }

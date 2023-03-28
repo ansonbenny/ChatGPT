@@ -70,6 +70,7 @@ const Menu = ({ changeColorMode, darkMode }) => {
 
         <div className="history">
           <button
+            className='active'
             onClick={() => {
               navigate('/chat/sample')
             }}

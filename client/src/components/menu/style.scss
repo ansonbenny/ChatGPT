@@ -166,11 +166,15 @@ header {
     button {
       width: calc(260px - 1rem);
       margin-left: .5rem;
-      margin-bottom: 3px;
+      margin-bottom: 5px;
       padding-right: .75rem;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+    }
+
+    .active {
+      background: rgba(52, 53, 65, 1);
     }
   }
 

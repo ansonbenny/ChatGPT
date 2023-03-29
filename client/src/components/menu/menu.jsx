@@ -6,7 +6,7 @@ import {
 import './style.scss'
 import { useNavigate } from 'react-router-dom'
 
-const Menu = ({ changeColorMode, darkMode }) => {
+const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
   const menuRef = useRef(null)
   const btnRef = useRef(null)
 
@@ -69,33 +69,29 @@ const Menu = ({ changeColorMode, darkMode }) => {
         </div>
 
         <div className="history">
-          <button
-            className='active'
-            onClick={() => {
-              navigate('/chat/sample')
-            }}
-          >{<Message />}
-            Clear conversationsaaaaaaaaaaaaaaaaaa
-          </button>
-          <button
-            onClick={() => {
-              navigate('/chat/sample')
-            }}
-          >{<Message />}Upgrade to Plus <span>New</span></button>
-          <button>{<Message />}Updates & FAQ</button>
-          <button>{<Message />}Log out</button>
-          <button>{<Message />}Clear conversations</button>
-          <button>{<Message />}Upgrade to Plus <span>New</span></button>
-          <button>{<Message />}Updates & FAQ</button>
-          <button>{<Message />}Log out</button>
-          <button>{<Message />}Clear conversations</button>
-          <button>{<Message />}Upgrade to Plus <span>New</span></button>
-          <button>{<Message />}Updates & FAQ</button>
-          <button>{<Message />}Log out</button>
-          <button>{<Message />}Clear conversations</button>
-          <button>{<Message />}Upgrade to Plus <span>New</span></button>
-          <button>{<Message />}Updates & FAQ</button>
-          <button>{<Message />}Log out</button>
+          {
+            history?.map((obj, key) => {
+              if (obj.active) {
+                return (
+                  <button key={key}
+                    className='active'
+                    onClick={() => {
+                      navigate('/chat/sample')
+                    }}
+                  >{<Message />}
+                    Clear conversationsaaaaaaaaaaaaaaaaaa
+                  </button>
+                )
+              } else {
+                return (
+                  <button key={key}
+                    onClick={() => {
+                      navigate('/chat/sample')
+                    }}
+                  >{<Message />}Upgrade to Plus <span>New</span></button>)
+              }
+            })
+          }
         </div>
 
         <div className="actions">
@@ -106,7 +102,9 @@ const Menu = ({ changeColorMode, darkMode }) => {
               : <button onClick={() => changeColorMode(false)}><Light />Light mode</button>
           }
           <button>{<Tab />}Updates & FAQ</button>
-          <button>{<LogOut />}Log out</button>
+          <button onClick={() => alert("You can't logout its guest account")} >
+            {<LogOut />}Log out
+          </button>
         </div>
       </div >
 

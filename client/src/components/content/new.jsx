@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { Sun, Thunder, Warning } from '../../assets'
 import './style.scss'
 
-const New = memo(() => {
+const New = memo(({ textAreaRef }) => {
   return (
     <div className='New'>
       <div>
@@ -16,15 +16,21 @@ const New = memo(() => {
             <h4 className='currentColor'>Examples</h4>
           </div>
 
-          <div className='card card-bg hover'>
+          <div className='card card-bg hover' onClick={() => {
+            setPrompt("Explain quantum computing in simple terms")
+          }}>
             <p className='currentColor'>"Explain quantum computing in simple terms" →</p>
           </div>
 
-          <div className='card card-bg hover'>
+          <div className='card card-bg hover' onClick={() => {
+            setPrompt("Got any creative ideas for a 10 year old’s birthday?")
+          }}>
             <p className='currentColor'>"Got any creative ideas for a 10 year old’s birthday?" →</p>
           </div>
 
-          <div className='card card-bg hover'>
+          <div className='card card-bg hover' onClick={() => {
+            setPrompt("How do I make an HTTP request in Javascript?")
+          }}>
             <p className='currentColor'>"How do I make an HTTP request in Javascript?" →</p>
           </div>
 

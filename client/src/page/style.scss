@@ -103,6 +103,10 @@
                 text-decoration-color: rgba(0, 0, 0, .5);
             }
         }
+
+        .error p{
+            color: #000000;
+        }
     }
 }
 
@@ -180,6 +184,10 @@
                 color: hsla(0, 0%, 100%, .5);
                 text-decoration-color: hsla(0, 0%, 100%, .5);
             }
+        }
+
+        .error p{
+            color: #FFFFFF;
         }
     }
 }
@@ -394,6 +402,46 @@
                     }
                 }
 
+            }
+        }
+
+        .error {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            p{
+                font-size: .75rem;
+                line-height: 1rem;
+                margin-top: .5rem;
+                margin-bottom: .5rem;
+            }
+
+            button {
+                position: relative;
+                font-size: .875rem;
+                line-height: 1.25rem;
+                padding: .5rem .75rem;
+                padding-left: 1.85rem;
+                border-radius: .25rem;
+                cursor: pointer;
+                background: rgba(16, 163, 127, 1);
+                color: rgba(255, 255, 255, 1);
+                border: none;
+
+                svg {
+                    left: .75rem;
+                    padding-top: .25rem;
+                    position: absolute;
+                    width: .75rem;
+                    height: .75rem;
+                    color: rgba(255, 255, 255, 1);
+                }
+
+                &:hover {
+                    background: rgba(26, 127, 100, 1);
+                }
             }
         }
 

@@ -2,9 +2,16 @@ import { useLayoutEffect, useState } from "react"
 import { Menu } from "./components"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Error, Main } from "./page"
+import axios from 'axios'
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false)
+
+  const [history, setHistory] = useState([{
+    prompt: '',
+    _id: 'aa',
+    active: true
+  }])
 
   const changeColorMode = (to) => {
     if (to) {
@@ -33,6 +40,10 @@ const App = () => {
       changeColorMode(false)
     }
 
+    axios.get('/api/openai').then((res)=>{
+      console.log(res)
+    })
+
   })
 
   return (
@@ -42,6 +53,8 @@ const App = () => {
           <Menu
             changeColorMode={changeColorMode}
             darkMode={darkMode}
+            history={history}
+            setHistory={setHistory}
           />
         </div>
 

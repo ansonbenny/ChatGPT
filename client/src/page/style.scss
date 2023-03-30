@@ -104,7 +104,7 @@
             }
         }
 
-        .error p{
+        .error p {
             color: #000000;
         }
     }
@@ -186,7 +186,7 @@
             }
         }
 
-        .error p{
+        .error p {
             color: #FFFFFF;
         }
     }
@@ -411,7 +411,7 @@
             justify-content: center;
             align-items: center;
 
-            p{
+            p {
                 font-size: .75rem;
                 line-height: 1rem;
                 margin-top: .5rem;
@@ -463,4 +463,86 @@
             }
         }
     }
+}
+
+.Auth {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    height: 100%;
+    width: 100%;
+    background: white;
+    color: #000000;
+
+    .inner {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        overflow-y: auto;
+
+        .suggection {
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            svg {
+                margin-bottom: .5rem;
+            }
+
+            p {
+                text-align: center;
+                margin-bottom: .5rem;
+            }
+
+            .btns {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                margin-top: .5rem;
+
+                button {
+                    width: 5em;
+                    height: 3em;
+                    text-align: center;
+                    background: rgba(16, 163, 127, 1);
+                    color: rgba(255, 255, 255, 1);
+                    border-radius: .25rem;
+                    border: none;
+                    cursor: pointer;
+
+                    &:hover {
+                        background: rgba(26, 127, 100, 1);
+                    }
+                }
+            }
+        }
+
+        .bottum {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+
+            a {
+                text-decoration: none;
+                color: rgba($color: #000000, $alpha: .5);
+            }
+
+            .start {
+                padding-right: .5rem;
+                font-size: .75rem;
+                border-right: 1px solid rgba($color: #000000, $alpha: .7);
+            }
+
+            .end {
+                padding-left: .5rem;
+                font-size: .75rem;
+            }
+        }
+    }
+
 }

@@ -1,9 +1,7 @@
 import { Router } from "express";
 import dotnet from 'dotenv'
 import { Configuration, OpenAIApi } from 'openai'
-import { db } from "../db/connection.js";
-import collections from "../db/collections.js";
-import { ObjectId } from "mongodb";
+import chat from "../helpers/chat.js";
 
 dotnet.config()
 
@@ -31,16 +29,7 @@ router.post('/', async (req, res) => {
             messages: [{ "role": "user", "content": prompt }]
         })
 
-        response.db = await db.collection(collections.CHAT).insertOne({
-            data: [{
-                user: {
-                    content: prompt
-                },
-                assistant: {
-                    content: response.openai?.['data']?.choices[0].message.content
-                }
-            }]
-        })
+        response.db = await chat.newResponse(prompt, response)
     } catch (err) {
         res.status(500).json({
             status: 500,
@@ -71,20 +60,7 @@ router.put('/', async (req, res) => {
             messages: [{ "role": "user", "content": prompt }]
         })
 
-        response.db = await db.collection(collections.CHAT).updateOne({
-            _id: new ObjectId(_id)
-        }, {
-            $push: {
-                data: {
-                    user: {
-                        content: prompt
-                    },
-                    assistant: {
-                        content: response.openai?.['data']?.choices[0].message.content
-                    }
-                }
-            }
-        })
+        response.db = await chat.updateChat(_id, prompt, response)
     } catch (err) {
         res.status(500).json({
             status: 500,

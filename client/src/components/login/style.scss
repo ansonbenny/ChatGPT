@@ -1,0 +1,79 @@
+.Auth .inner {
+    .Login {
+        display: flex;
+        flex-direction: column;
+        height: 90%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            padding-top: 5rem;
+            color: #2D333A;
+            font-size: 32px;
+        }
+
+        .options {
+            .manual {
+                margin-top: 2em;
+
+                div {
+                    position: relative;
+
+                    label {
+                        color: #6f7780;
+                        position: absolute;
+                        padding-left: 16px;
+                        padding-top: 16px;
+                        border: none;
+                        transition: all .2s ease-in-out;
+                        -moz-transition: all .2s ease-in-out;
+                    }
+
+                    .active-label-green {
+                        color: rgba(26, 127, 100, 1);
+                    }
+
+                    .active-label {
+                        padding-left: 2px;
+                        padding-right: 2px;
+                        padding-top: 0;
+                        margin-left: 10px;
+                        margin-top: -10px;
+                        background: white;
+                    }
+
+                    input {
+                        height: 52px;
+                        width: 18rem;
+                        padding-left: 16px;
+                        padding-right: 16px;
+                        color: #2d333a;
+                        border: 1px solid #c2c8d0;
+                        position: relative;
+                        background: transparent;
+                        border-radius: 3px;
+                        line-height: 1.1;
+                        outline: none;
+                        transition: all .2s ease-in-out;
+                        -moz-transition: all .2s ease-in-out;
+
+                        @media screen and (max-width:340px) {
+                            width: 100%;
+                            padding: 0;
+                        }
+                    }
+
+                    .active-input-green {
+                        border-color: rgba(26, 127, 100, 1);
+                    }
+
+                    .active-input {
+                        position: static;
+                    }
+
+                }
+            }
+        }
+    }
+}

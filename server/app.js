@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotnet from 'dotenv'
 import { connectDB } from './db/connection.js'
 import OpenAiRoute from './routes/openai.js'
+import UserRoute from './routes/user.js'
 
 dotnet.config()
 
@@ -13,6 +14,7 @@ app.use(cors())
 app.use(express.json({ limit: '50mb' }))
 
 app.use('/api/openai', OpenAiRoute)
+app.use('/api/user', UserRoute)
 
 connectDB((err) => {
     if (err) return console.log("MongoDB Connect Failed : ", err)

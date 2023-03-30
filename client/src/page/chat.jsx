@@ -14,7 +14,6 @@ const reducer = (state, { type, status }) => {
         case 'loading':
             return { chat: true, loading: status }
         case 'resume':
-            console.log(status)
             return { chat: true, resume: status, loading: status }
         default: return state
     }
@@ -53,12 +52,10 @@ const Main = () => {
                     prompt
                 })
             } catch (err) {
-                console.log(err)
-                //dispatch({ type: 'error', status: false })
+                dispatch({ type: 'error', status: true })
             } finally {
-                dispatch({ type: 'chat', status: true })
-                chatRef.current.loadResponse(true, dispatch)
                 if (res) {
+                    chatRef.current.loadResponse(dispatch)
                     dispatch({ type: 'error', status: false })
                 }
             }
@@ -87,11 +84,11 @@ const Main = () => {
                                             {
                                                 !status.resume ? <button
                                                     onClick={() => {
-                                                        chatRef.current.loadResponse(true, dispatch)
+                                                        chatRef.current.loadResponse(dispatch)
                                                     }} ><Reload /> Regenerate response</button>
                                                     : <button
                                                         onClick={() => {
-                                                            chatRef.current.loadResponse(false, dispatch)
+                                                            chatRef.current.stopResponse(dispatch)
                                                         }} ><Stop /> Stop generating</button>
                                             }
                                         </>

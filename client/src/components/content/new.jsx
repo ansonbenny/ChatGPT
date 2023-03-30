@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { Sun, Thunder, Warning } from '../../assets'
 import './style.scss'
 
-const New = memo(({ textAreaRef }) => {
+const New = memo(({ setPrompt }) => {
   return (
     <div className='New'>
       <div>

@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import { GptIcon } from '../assets'
-import { LoginComponent } from '../components'
+import { Auth } from '../components'
 
 const Login = () => {
   const [log, setLog] = useState(true)
   return (
     <div className='Auth'>
       <div className="inner">
+
         {
           log ? (
-            <LoginComponent />
+            <Auth title={`Welcome back`} />
           ) : (
             <div className='suggection'>
               <div>

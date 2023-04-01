@@ -1,0 +1,351 @@
+.Auth .inner {
+    .Constant {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+
+        .icon {
+            margin-top: 2rem;
+
+            svg {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        h1 {
+            padding-top: 5rem;
+            color: #2D333A;
+            font-size: 32px;
+        }
+
+        p {
+            margin-top: .5rem;
+            font-size: 12.75px;
+            line-height: 1.5rem;
+            width: calc(18rem + 33px);
+            text-align: center;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .options {
+            .manual {
+                margin-top: 2em;
+
+                div {
+                    position: relative;
+
+                    label {
+                        color: #6f7780;
+                        position: absolute;
+                        padding-left: 16px;
+                        padding-top: 16px;
+                        border: none;
+                        transition: all .2s ease-in-out;
+                        -moz-transition: all .2s ease-in-out;
+                    }
+
+                    .active-label-green {
+                        color: rgba(26, 127, 100, 1);
+                    }
+
+                    .active-label {
+                        padding-left: 2px;
+                        padding-right: 2px;
+                        padding-top: 0;
+                        margin-left: 10px;
+                        margin-top: -10px;
+                        background: white;
+                    }
+
+                    input {
+                        height: 52px;
+                        width: 18rem;
+                        padding-left: 16px;
+                        padding-right: 16px;
+                        color: #2d333a;
+                        border: 1px solid #c2c8d0;
+                        position: relative;
+                        background: transparent;
+                        border-radius: 3px;
+                        line-height: 1.1;
+                        outline: none;
+                        font-size: 16px;
+                        transition: all .2s ease-in-out;
+                        -moz-transition: all .2s ease-in-out;
+
+                        @media screen and (max-width:340px) {
+                            width: calc(100% - 16px);
+                            padding-right: 0px;
+                        }
+                    }
+
+                    .active-input-green {
+                        border-color: rgba(26, 127, 100, 1);
+                    }
+
+                    .active-input {
+                        position: static;
+                    }
+
+                    button {
+                        text-align: center;
+                        height: 52px;
+                        width: calc(18rem + 33px);
+                        margin-top: 1.5rem;
+                        color: #FFFFFF;
+                        background: rgba(16, 163, 127, 1);
+                        transition: all .1s ease-in-out;
+                        -moz-transition: all .1s ease-in-out;
+                        border-radius: 3px;
+                        border: none;
+                        outline: none;
+                        font-size: 16px;
+
+                        @media screen and (max-width:340px) {
+                            width: 100%;
+                        }
+
+                        &:hover {
+                            cursor: pointer;
+                            background: rgba(26, 127, 100, 1);
+                        }
+                    }
+
+                }
+            }
+
+            .extra {
+                margin-bottom: 6rem;
+
+                .divide {
+                    margin-top: 1.5rem;
+                    margin-bottom: 2rem;
+                    border-bottom: 1px solid #c2c8d0;
+                    position: relative;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+
+                    span {
+                        padding: 0 10px;
+                        position: absolute;
+                        color: #2D333A;
+                        font-size: 12px;
+                        background: #FFFFFF;
+
+                    }
+                }
+
+                .btns {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: start;
+
+                    button {
+                        outline: none;
+                        text-align: start;
+                        width: calc(18rem + 33px);
+                        height: 52px;
+                        padding-left: calc(16px + 2rem);
+                        padding-right: 16px;
+                        margin-bottom: .5rem;
+                        position: relative;
+                        color: #2D333A;
+                        font-size: 16px;
+                        border: 1px solid #c2c8d0;
+                        border-radius: 3px;
+                        background: #FFFFFF;
+                        transition: all .1s ease-in-out;
+                        -moz-transition: all .1s ease-in-out;
+
+                        @media screen and (max-width:340px) {
+                            width: 100%;
+                        }
+
+                        svg {
+                            top: 30%;
+                            left: 16px;
+                            position: absolute;
+                            width: 20px;
+                            height: 20px;
+                        }
+
+                        &:hover {
+                            background: rgba(0, 0, 0, .1);
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+
+        div[data-for="acc-sign-up-login"] {
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: row;
+            margin-top: 1rem;
+
+            span,
+            a {
+                font-size: 12px;
+                text-decoration: none;
+            }
+
+            span {
+                color: #2D333A;
+                padding-right: 3px;
+            }
+
+            a {
+                color: rgba(16, 163, 127, 1);
+                padding: 5px 5px;
+                border-radius: 3px;
+                transition: all .2s ease-in-out;
+                -moz-transition: all .2s ease-in-out;
+
+                &:focus {
+                    background: rgba(0, 123, 173, .15);
+                }
+            }
+        }
+
+        .Form {
+            margin-top: 1rem;
+
+            .email {
+                position: relative;
+
+                input {
+                    height: 52px;
+                    width: 18rem;
+                    padding-left: 16px;
+                    padding-right: 16px;
+                    color: #2d333a;
+                    border: 1px solid #c2c8d0;
+                    background: white;
+                    border-radius: 3px;
+                    line-height: 1.1;
+                    outline: none;
+                    font-size: 16px;
+                    transition: all .2s ease-in-out;
+                    -moz-transition: all .2s ease-in-out;
+
+                    @media screen and (max-width:340px) {
+                        width: calc(100% - 16px);
+                        padding-right: 0px;
+                    }
+                }
+
+                button {
+                    position: absolute;
+                    right: 10px;
+                    font-size: 16px;
+                    top: calc(30% - 2.5px);
+                    color: rgba(16, 163, 127, 1);
+                    padding: 5px 5px;
+                    border-radius: 3px;
+                    border: none;
+                    background: white;
+                    transition: all .2s ease-in-out;
+                    -moz-transition: all .2s ease-in-out;
+                    cursor: pointer;
+
+                    &:focus {
+                        background: rgba(0, 123, 173, .15);
+                    }
+                }
+            }
+
+            .password {
+                margin-top: .8rem;
+                position: relative;
+
+                input {
+                    height: 52px;
+                    width: calc(100% - (4rem + 17px));
+                    padding-left: 16px;
+                    padding-right: 4rem;
+                    color: #2d333a;
+                    border: 1px solid #c2c8d0;
+                    background: white;
+                    border-radius: 3px;
+                    line-height: 1.1;
+                    outline: none;
+                    font-size: 16px;
+                    transition: all .2s ease-in-out;
+                    -moz-transition: all .2s ease-in-out;
+                }
+
+                button {
+                    top: 0;
+                    position: absolute;
+                    right: 0;
+                    height: 100%;
+                    border: none;
+                    padding: 0 10px;
+                    background: transparent;
+                    transition: all .2s ease-in-out;
+                    -moz-transition: all .2s ease-in-out;
+
+                    &:hover {
+                        cursor: pointer;
+                        background: rgba(0, 0, 0, .1);
+                    }
+                }
+            }
+
+            .forgot {
+                margin-top: 1rem;
+                a {
+                    color: rgba(16, 163, 127, 1);
+                    padding: 5px 5px;
+                    border-radius: 3px;
+                    font-size: 12px;
+                    text-decoration: none;
+                    transition: all .2s ease-in-out;
+                    -moz-transition: all .2s ease-in-out;
+
+                    &:focus {
+                        background: rgba(0, 123, 173, .15);
+                    }
+                }
+            }
+
+            .submit {
+                text-align: center;
+                height: 52px;
+                width: calc(18rem + 33px);
+                margin-top: 1.5rem;
+                color: #FFFFFF;
+                background: rgba(16, 163, 127, 1);
+                transition: all .1s ease-in-out;
+                -moz-transition: all .1s ease-in-out;
+                border-radius: 3px;
+                border: none;
+                outline: none;
+                font-size: 16px;
+
+                @media screen and (max-width:340px) {
+                    width: 100%;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    background: rgba(26, 127, 100, 1);
+                }
+            }
+
+            div[data-for="acc-sign-up-login"] {
+                margin-bottom: 5rem;
+            }
+
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from "react"
 import { Menu } from "./components"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Error, Login, Main, Signup } from "./page"
+import { Error, Forgot, Login, Main, Signup } from "./page"
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false)
@@ -58,7 +58,10 @@ const App = () => {
           <Route exact path="/chat" element={<Main />} />
           <Route path="/chat/:id" element={<Main />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/login/auth" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/signup/pending/:id" element={<Signup />} />
+          <Route path="/forgot" element={<Forgot />} />
           <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>

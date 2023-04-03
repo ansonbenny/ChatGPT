@@ -10,8 +10,8 @@ const Options = ({ inputRef, labelRef, isSignup, dispatch }) => {
                 dispatch({ type: 'filled', status: true })
             }}>
                 <div>
-                    <label ref={labelRef}>Email address</label>
-                    <input ref={inputRef} type="email" onFocus={() => {
+                    <label className='labelEffect' ref={labelRef}>Email address</label>
+                    <input className='inputEffect' ref={inputRef} type="email" onFocus={() => {
                         labelRef.current?.classList.add("active-label", "active-label-green")
                         inputRef.current?.classList.add("active-input", "active-input-green")
                     }} onBlur={() => {

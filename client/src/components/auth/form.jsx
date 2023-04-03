@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeHide, Tick } from '../../assets'
 
@@ -6,62 +6,55 @@ const Form = ({ inputRef, labelRef, state, dispatch, isSignup, isForgot }) => {
 
     const navigate = useNavigate()
 
+    const inputClass = useCallback((add, label, input) => {
+        if (add) {
+            labelRef.current?.classList.add(...label)
+            inputRef.current?.classList.add(...input)
+        } else {
+            labelRef.current?.classList.remove(...label)
+            inputRef.current?.classList.remove(...input)
+        }
+    }, [])
+
+    const passwordClass = useCallback((remove, add) => {
+        document.querySelector(remove).classList?.remove('active')
+        document.querySelector(add).classList?.add('active')
+    }, [])
+
     return (
         <form className='Form'>
-            <div>
-                {
-                    !isForgot ? (
-                        <div className="email">
-                            <button type='button' onClick={() => {
-                                dispatch({ type: 'filled', status: false })
-                            }} >Edit</button>
-                            <input value={'ansonbenny@gmail.com'} type="text" disabled readOnly />
-                        </div>
-                    ) : (
-                        <div className="emailForgot">
-                            <label ref={labelRef}>Email address</label>
-                            <input ref={inputRef} type="email" onFocus={() => {
-                                labelRef.current?.classList.add("active-label", "active-label-green")
-                                inputRef.current?.classList.add("active-input", "active-input-green")
-                            }} onBlur={() => {
-                                if (inputRef.current?.value.length <= 0) {
-                                    labelRef.current?.classList.remove("active-label", "active-label-green")
-                                    inputRef.current?.classList.remove("active-input", "active-input-green")
-                                } else {
-                                    labelRef.current?.classList.remove("active-label-green")
-                                    inputRef.current?.classList.remove("active-input-green")
-                                }
-                            }} required />
-                        </div>
-                    )
-                }
 
-                {
-                    !isForgot && (
-                        <>
+            {
+                !isForgot ? (
+                    <Fragment>
+                        <div>
+                            <div className="email">
+                                <button type='button' onClick={() => {
+                                    dispatch({ type: 'filled', status: false })
+                                }} >Edit</button>
+                                <input value={'ansonbenny@gmail.com'} type="text" disabled readOnly />
+
+                                <div className='error'><div>!</div> The user already exists.</div>
+                            </div>
+
                             <div className="password">
-                                <label ref={labelRef}>Password</label>
-                                <input ref={inputRef} type="password" onFocus={() => {
-                                    labelRef.current?.classList.add("active-label", "active-label-green")
-                                    inputRef.current?.classList.add("active-input", "active-input-green")
+                                <label className='labelEffect' ref={labelRef}>Password</label>
+                                <input className='inputEffect' ref={inputRef} type="password" onFocus={() => {
+                                    inputClass(true, ["active-label", "active-label-green"], ["active-input", "active-input-green"])
                                 }} onBlur={() => {
                                     if (inputRef.current?.value.length <= 0) {
-                                        labelRef.current?.classList.remove("active-label", "active-label-green")
-                                        inputRef.current?.classList.remove("active-input", "active-input-green")
+                                        inputClass(false, ["active-label", "active-label-green"], ["active-input", "active-input-green"])
                                     } else {
-                                        labelRef.current?.classList.remove("active-label-green")
-                                        inputRef.current?.classList.remove("active-input-green")
+                                        inputClass(false, ["active-label-green"], ["active-input-green"])
                                     }
                                 }} onInput={(e) => {
 
                                     document.querySelector('#alertBox').style.display = "block"
 
                                     if (e.target.value.length >= 8) {
-                                        document.querySelector('#passAlertError').classList?.remove('active')
-                                        document.querySelector('#passAlertDone').classList?.add('active')
+                                        passwordClass('#passAlertError', "#passAlertDone")
                                     } else {
-                                        document.querySelector('#passAlertDone').classList?.remove('active')
-                                        document.querySelector('#passAlertError').classList?.add('active')
+                                        passwordClass("#passAlertDone", "#passAlertError")
                                     }
                                 }} required />
 
@@ -93,45 +86,57 @@ const Form = ({ inputRef, labelRef, state, dispatch, isSignup, isForgot }) => {
                                     At least 8 characters
                                 </p>
                             </div>
-                        </>
-                    )
-                }
 
-                {
-                    !isSignup && !isForgot && <div className='forgot' >
-                        <Link to={'/forgot'} >Forgot password?</Link>
+                            <button type='submit'>Continue</button>
+
+                            {
+                                !isSignup && <div className='forgot' >
+                                    <Link to={'/forgot'} >Forgot password?</Link>
+                                </div>
+                            }
+                        </div>
+                        <div data-for="acc-sign-up-login">
+                            {
+                                isSignup ? (
+                                    <>
+                                        <span>Already have an account?</span>
+                                        <Link to={'/login/auth'}>Log in</Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span>Don't have an account?</span>
+                                        <Link to={'/signup'}>Sign up</Link>
+                                    </>
+                                )
+                            }
+                        </div>
+                    </Fragment>
+                ) : (
+                    <div>
+                        <div className="emailForgot">
+                            <label className='labelEffect' ref={labelRef}>Email address</label>
+                            <input className='inputEffect' ref={inputRef} type="email" onFocus={() => {
+                                inputClass(true, ["active-label", "active-label-green"], ["active-input", "active-input-green"])
+                            }} onBlur={() => {
+                                if (inputRef.current?.value.length <= 0) {
+                                    inputClass(false, ["active-label", "active-label-green"], ["active-input", "active-input-green"])
+                                } else {
+                                    inputClass(false, ["active-label-green"], ["active-input-green"])
+                                }
+                            }} required />
+
+                            <div className='error'><div>!</div> The user already exists.</div>
+                        </div>
+
+                        <button type='submit'>Continue</button>
+
+                        <div>
+                            <button type='button' onClick={() => {
+                                navigate('/login/auth')
+                            }} className='back'>Back to Apps Client</button>
+                        </div>
                     </div>
-                }
-
-                <button type='submit'>Continue</button>
-
-                {
-                    isForgot && <div>
-                        <button type='button' onClick={() => {
-                            navigate('/login/auth')
-                        }} className='back'>Back to Apps Client</button>
-                    </div>
-                }
-
-            </div>
-
-            {
-                !isForgot && <div data-for="acc-sign-up-login">
-
-                    {
-                        isSignup ? (
-                            <>
-                                <span>Already have an account?</span>
-                                <Link to={'/login/auth'}>Log in</Link>
-                            </>
-                        ) : (
-                            <>
-                                <span>Don't have an account?</span>
-                                <Link to={'/signup'}>Sign up</Link>
-                            </>
-                        )
-                    }
-                </div>
+                )
             }
         </form>
     )

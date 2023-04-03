@@ -1,5 +1,5 @@
 .Auth .inner {
-    .Constant {
+    .Contain {
         display: flex;
         flex-direction: column;
         height: auto;
@@ -32,6 +32,55 @@
             padding-bottom: 0;
         }
 
+        //Input Effect
+
+        .labelEffect {
+            color: #6f7780;
+            position: absolute;
+            padding-left: 16px;
+            padding-top: 16px;
+            border: none;
+            transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+        }
+
+        .active-label-green {
+            color: rgba(26, 127, 100, 1);
+        }
+
+        .active-label {
+            padding-left: 2px;
+            padding-right: 2px;
+            padding-top: 0;
+            margin-left: 10px;
+            margin-top: -10px;
+            background: white;
+        }
+
+        .inputEffect {
+            height: 52px;
+            color: #2d333a;
+            border: 1px solid #c2c8d0;
+            position: relative;
+            background: transparent;
+            border-radius: 3px;
+            line-height: 1.1;
+            outline: none;
+            font-size: 16px;
+            transition: all .2s ease-in-out;
+            -moz-transition: all .2s ease-in-out;
+        }
+
+        .active-input-green {
+            border-color: rgba(26, 127, 100, 1);
+        }
+
+        .active-input {
+            position: static;
+        }
+
+        //Input Effect
+
         .options {
             .manual {
                 margin-top: 2em;
@@ -39,57 +88,15 @@
                 div {
                     position: relative;
 
-                    label {
-                        color: #6f7780;
-                        position: absolute;
-                        padding-left: 16px;
-                        padding-top: 16px;
-                        border: none;
-                        transition: all .2s ease-in-out;
-                        -moz-transition: all .2s ease-in-out;
-                    }
-
-                    .active-label-green {
-                        color: rgba(26, 127, 100, 1);
-                    }
-
-                    .active-label {
-                        padding-left: 2px;
-                        padding-right: 2px;
-                        padding-top: 0;
-                        margin-left: 10px;
-                        margin-top: -10px;
-                        background: white;
-                    }
-
                     input {
-                        height: 52px;
                         width: 18rem;
                         padding-left: 16px;
                         padding-right: 16px;
-                        color: #2d333a;
-                        border: 1px solid #c2c8d0;
-                        position: relative;
-                        background: transparent;
-                        border-radius: 3px;
-                        line-height: 1.1;
-                        outline: none;
-                        font-size: 16px;
-                        transition: all .2s ease-in-out;
-                        -moz-transition: all .2s ease-in-out;
 
                         @media screen and (max-width:340px) {
                             width: calc(100% - 16px);
                             padding-right: 0px;
                         }
-                    }
-
-                    .active-input-green {
-                        border-color: rgba(26, 127, 100, 1);
-                    }
-
-                    .active-input {
-                        position: static;
                     }
 
                     button {
@@ -247,7 +254,7 @@
                     position: absolute;
                     right: 10px;
                     font-size: 16px;
-                    top: calc(30% - 2.5px);
+                    top: 15%;
                     color: rgba(16, 163, 127, 1);
                     padding: 5px 5px;
                     border-radius: 3px;
@@ -261,57 +268,38 @@
                         background: rgba(0, 123, 173, .15);
                     }
                 }
+
+                .error {
+                    margin-top: 5px;
+                    text-align: start;
+                    color: red;
+                    font-size: 12px;
+                    display: flex;
+                    flex-direction: row;
+
+                    div {
+                        display: flex;
+                        flex-direction: column;
+                        height: 1rem;
+                        width: 1rem !important;
+                        color: white;
+                        background: red;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        margin-right: 5px;
+                    }
+                }
             }
 
             .password {
                 margin-top: .8rem;
                 position: relative;
 
-                label {
-                    color: #6f7780;
-                    position: absolute;
-                    padding-left: 16px;
-                    padding-top: 16px;
-                    border: none;
-                    transition: all .2s ease-in-out;
-                    -moz-transition: all .2s ease-in-out;
-                }
-
-                .active-label-green {
-                    color: rgba(26, 127, 100, 1);
-                }
-
-                .active-label {
-                    padding-left: 2px;
-                    padding-right: 2px;
-                    padding-top: 0;
-                    margin-left: 10px;
-                    margin-top: -10px;
-                    background: white;
-                }
-
                 input {
-                    height: 52px;
                     width: calc(100% - (4rem + 17px));
                     padding-left: 16px;
                     padding-right: 4rem;
-                    color: #2d333a;
-                    border: 1px solid #c2c8d0;
-                    background: white;
-                    border-radius: 3px;
-                    line-height: 1.1;
-                    outline: none;
-                    font-size: 16px;
-                    transition: all .2s ease-in-out;
-                    -moz-transition: all .2s ease-in-out;
-                }
-
-                .active-input-green {
-                    border-color: rgba(26, 127, 100, 1);
-                }
-
-                .active-input {
-                    position: static;
                 }
 
                 button {
@@ -421,44 +409,11 @@
             }
 
             .emailForgot {
-                label {
-                    color: #6f7780;
-                    position: absolute;
-                    padding-left: 16px;
-                    padding-top: 16px;
-                    border: none;
-                    transition: all .2s ease-in-out;
-                    -moz-transition: all .2s ease-in-out;
-                }
-
-                .active-label-green {
-                    color: rgba(26, 127, 100, 1);
-                }
-
-                .active-label {
-                    padding-left: 2px;
-                    padding-right: 2px;
-                    padding-top: 0;
-                    margin-left: 10px;
-                    margin-top: -10px;
-                    background: white;
-                }
 
                 input {
-                    height: 52px;
                     width: 18rem;
                     padding-left: 16px;
                     padding-right: 16px;
-                    color: #2d333a;
-                    border: 1px solid #c2c8d0;
-                    position: relative;
-                    background: transparent;
-                    border-radius: 3px;
-                    line-height: 1.1;
-                    outline: none;
-                    font-size: 16px;
-                    transition: all .2s ease-in-out;
-                    -moz-transition: all .2s ease-in-out;
 
                     @media screen and (max-width:340px) {
                         width: calc(100% - 16px);
@@ -466,12 +421,26 @@
                     }
                 }
 
-                .active-input-green {
-                    border-color: rgba(26, 127, 100, 1);
-                }
+                .error {
+                    margin-top: 5px;
+                    text-align: start;
+                    color: red;
+                    font-size: 12px;
+                    display: flex;
+                    flex-direction: row;
 
-                .active-input {
-                    position: static;
+                    div {
+                        display: flex;
+                        flex-direction: column;
+                        height: 1rem;
+                        width: 1rem !important;
+                        color: white;
+                        background: red;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        margin-right: 5px;
+                    }
                 }
             }
 

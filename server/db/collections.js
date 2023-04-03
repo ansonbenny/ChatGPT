@@ -1,3 +1,4 @@
 export default {
-    CHAT: 'chat'
+    CHAT: 'chat',
+    USER: 'user'
 }

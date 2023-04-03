@@ -5,7 +5,7 @@ import './style.scss'
 const RegisterPendings = () => {
 
   return (
-    <div className='Constant'>
+    <div className='Contain'>
       <div className='icon'>
         <GptIcon />
       </div>

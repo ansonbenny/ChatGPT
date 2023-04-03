@@ -27,7 +27,7 @@ const Auth = ({ alert, title, isSignup, isForgot }) => {
     const mail = false
 
     return (
-        <div className='Constant'>
+        <div className='Contain'>
             <div className='icon'>
                 <GptIcon />
             </div>

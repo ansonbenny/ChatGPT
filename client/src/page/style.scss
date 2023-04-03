@@ -28,7 +28,7 @@
     }
 }
 
-:is(.light) {
+.light {
 
     .Error {
         background: white;
@@ -110,7 +110,7 @@
     }
 }
 
-:is(.dark) {
+.dark {
 
     .Error {
         background: rgba(52, 53, 65, 1);

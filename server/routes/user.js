@@ -7,6 +7,7 @@ let router = Router()
 
 router.post('/signup', async (req, res) => {
     req.body.pending = true
+    req.body.email = req.body.email.toLowerCase()
 
     let response = null
 
@@ -29,7 +30,7 @@ router.post('/signup', async (req, res) => {
             fs.readFile(`${path.resolve(path.dirname(''))}/mail/template.html`, 'utf8', (err, html) => {
                 if (!err) {
 
-                    html = html.replace('URL', `${process.env.SITE_URL}/signup/pending/${response?._id}`)
+                    html = html.replace('URL', `${process.env.SITE_URL}/signup/pending/${response._id}`)
 
                     sendMail({
                         to: req.body.email,
@@ -41,13 +42,64 @@ router.post('/signup', async (req, res) => {
                     console.log(err)
                 }
             })
-        }
 
-        res.status(200).json({
-            status: 200,
-            message: 'Success',
-            manual: response?.manual
+            res.status(200).json({
+                status: 200,
+                data: {
+                    message: 'Success',
+                    _id: !response.manual && response._id || null,
+                    manual: response.manual || false
+                }
+            })
+        } else if (response) {
+            res.status(200).json({
+                status: 200,
+                data: {
+                    message: 'Success',
+                    _id: !response.manual && response._id || null,
+                    manual: response.manual || false
+                }
+            })
+        }
+    }
+})
+
+router.get('/checkPending', async (req, res) => {
+    const { _id } = req.query
+    let response = null
+    try {
+        response = await user.checkPending(_id)
+    } catch (err) {
+        res.status(500).json({
+            status: 500,
+            message: err
         })
+    } finally {
+        if (response) {
+            res.status(200).json({
+                status: 200,
+                data: response
+            })
+        }
+    }
+})
+
+router.put('/signup-finish', async (req, res) => {
+    let response = null
+    try {
+        response = await user.finishSignup(req.body)
+    } catch (err) {
+        res.status(500).json({
+            status: 500,
+            message: err
+        })
+    } finally {
+        if (response) {
+            res.status(200).json({
+                status: 200,
+                data: response
+            })
+        }
     }
 })
 

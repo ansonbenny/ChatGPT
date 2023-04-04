@@ -1,8 +1,39 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { GptIcon } from '../../assets'
 import './style.scss'
 
-const RegisterPendings = () => {
+const RegisterPendings = ({ _id }) => {
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    fName: '',
+    lName: ''
+  })
+
+  const formHandle = async (e) => {
+    e.preventDefault()
+    if (formData?.fName && formData?.lName) {
+      let res = null
+      try {
+        res = await axios.put('/api/user/signup-finish', {
+          fName: formData.fName,
+          lName: formData.lName,
+          _id
+        })
+      } catch (err) {
+        console.log(err)
+        alert(err)
+      } finally {
+        if (res) {
+          navigate('/login')
+        }
+      }
+    } else {
+      alert("Enter full name")
+    }
+  }
 
   return (
     <div className='Contain'>
@@ -12,10 +43,15 @@ const RegisterPendings = () => {
 
       <h1>Tell us about you</h1>
 
-      <div className="pendings">
+      <form className="pendings" onSubmit={formHandle}>
         <div className="fullName">
-          <input type="text" placeholder='First name' />
-          <input type="text" placeholder='Last name' />
+          <input type="text"
+            value={formData.fName} placeholder='First name' onInput={(e) => {
+              setFormData({ ...formData, fName: e.target.value })
+            }} />
+          <input type="text" value={formData.lName} placeholder='Last name' onInput={(e) => {
+            setFormData({ ...formData, lName: e.target.value })
+          }} />
         </div>
 
         <button type='submit'>Continue</button>
@@ -23,7 +59,7 @@ const RegisterPendings = () => {
         <div>
           <p>By clicking "Continue", you agree to our <span>Terms</span>, <br /><span>Privacy policy</span> and confirm you're 18 years or older.</p>
         </div>
-      </div>
+      </form>
 
     </div >
   )

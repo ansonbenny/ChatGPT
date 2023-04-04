@@ -14,7 +14,7 @@ export default {
 
             if (!check) {
                 try {
-                    details.password = await bcrypt.hash(details.password, 10)
+                    details.pass = await bcrypt.hash(details.pass, 10)
                 } catch (err) {
                     reject(err)
                 } finally {
@@ -32,6 +32,39 @@ export default {
                     reject({ exists: true, text: 'Email already used' })
                 }
             }
+        })
+    },
+    checkPending: (_id) => {
+        return new Promise((resolve, reject) => {
+            db.collection(collections.USER).findOne({
+                _id: new ObjectId(_id)
+            }).then((data) => {
+                if (data?.pending) {
+                    data.pass = null
+                    resolve(data)
+                } else {
+                    reject({ text: 'Already registered' })
+                }
+            }).catch((err) => {
+                reject(err)
+            })
+        })
+    },
+    finishSignup: ({ fName, lName, _id }) => {
+        return new Promise((resolve, reject) => {
+            db.collection(collections.USER).updateOne({
+                _id: new ObjectId(_id)
+            }, {
+                $set: {
+                    fName: fName,
+                    lName: lName,
+                    pending: false
+                }
+            }).then((done) => {
+                resolve(done)
+            }).catch((err) => {
+                reject(err)
+            })
         })
     }
 }

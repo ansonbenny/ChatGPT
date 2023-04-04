@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GptIcon } from '../assets'
-import { Auth } from '../components'
+import { LoginComponent } from '../components'
 
 const Login = () => {
   const [auth, setAuth] = useState(false)
@@ -9,6 +9,7 @@ const Login = () => {
   const navigate = useNavigate()
 
   const path = window.location.pathname
+  // if user not show
 
   useLayoutEffect(() => {
     if (path === '/login/auth') {
@@ -17,14 +18,14 @@ const Login = () => {
       setAuth(false)
     }
   }, [path])
-  
+
   return (
     <div className='Auth'>
       <div className="inner">
 
         {
           auth ? (
-            <Auth title={`Welcome back`} />
+            <LoginComponent />
           ) : (
             <div className='suggection'>
               <div>

@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
             message: 'Error'
         })
     } finally {
-        if (response.db && response.openai) {
+        if (response?.db && response?.openai) {
             res.status(200).json({
                 status: 200,
                 message: 'Success',
@@ -67,7 +67,7 @@ router.put('/', async (req, res) => {
             message: err
         })
     } finally {
-        if (response.db && response.openai) {
+        if (response?.db && response?.openai) {
             res.status(200).json({
                 status: 200,
                 message: 'Success',

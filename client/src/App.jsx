@@ -2,6 +2,7 @@ import { useLayoutEffect, useState } from "react"
 import { Menu } from "./components"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Error, Forgot, Login, Main, Signup } from "./page"
+import Loading from "./components/loading/loading"
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false)
@@ -41,6 +42,8 @@ const App = () => {
 
   })
 
+  /// Loading
+
   return (
     <section className={false ? 'main-grid' : null}>
       <BrowserRouter>
@@ -52,6 +55,8 @@ const App = () => {
             setHistory={setHistory}
           />
         </div>)}
+
+        {false && <Loading />}
 
         <Routes>
           <Route exact path="/" element={<Main />} />

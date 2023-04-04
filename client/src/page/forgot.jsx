@@ -1,16 +1,14 @@
 import React from 'react'
-import { Auth } from '../components'
+import { ForgotComponent } from '../components'
 
 const Forgot = () => {
+    // if user not show
+
     return (
         <div className='Auth'>
             <div className="inner">
 
-                <Auth
-                    isForgot
-                    alert={`Enter your email address and we will send you instructions to reset your password.`}
-                    title={`Reset your password `}
-                />
+                <ForgotComponent />
 
                 <div className="bottum">
                     <div className='start'>

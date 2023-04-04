@@ -1,31 +1,53 @@
+import axios from 'axios'
 import React, { useLayoutEffect, useState } from 'react'
-import { Auth, RegisterPendings } from '../components'
+import { useNavigate, useParams } from 'react-router-dom'
+import { RegisterPendings, SignupComponent } from '../components'
 import './style.scss'
 
 const Signup = () => {
   const [pending, setPending] = useState(false)
-
+  const { id } = useParams()
   const path = window.location.pathname
+
+  const navigate = useNavigate()
+
+  // if user not show
 
   useLayoutEffect(() => {
     if (path === '/signup') {
       setPending(false)
     } else {
-      setPending(true)
+      const checkPending = async () => {
+        let res = null
+        try {
+          res = await axios.get('/api/user/checkPending', {
+            params: {
+              _id: id
+            }
+          })
+        } catch (err) {
+          alert(err)
+          console.log(err)
+          navigate('/signup')
+        } finally {
+          if (res) {
+            setPending(true)
+          }
+        }
+      }
+
+      checkPending()
     }
   }, [path])
+
   return (
     <div className='Auth'>
       <div className="inner">
 
         {
-          pending ? <RegisterPendings />
+          pending ? <RegisterPendings _id={id} />
             : <>
-              <Auth
-                isSignup
-                alert={`Please note that phone verification is required for signup. Your number will only be used to verify your identity for security purposes.`}
-                title={`Create your account`}
-              />
+              <SignupComponent />
 
               <div className="bottum">
                 <div className='start'>

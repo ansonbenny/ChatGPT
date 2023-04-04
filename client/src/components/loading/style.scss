@@ -1,0 +1,56 @@
+.light {
+    div[data-for='Loading'] {
+        background: white;
+
+        svg {
+            color: #343541;
+        }
+
+        div {
+            color: #343541;
+        }
+    }
+}
+
+.dark {
+    div[data-for='Loading'] {
+        background: rgba(52, 53, 65, 1);
+
+        svg {
+            color: #D9D9E3;
+        }
+
+        div {
+            color: #D9D9E3;
+        }
+    }
+}
+
+div[data-for='Loading'] {
+    display: block;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 3000;
+
+    .inner {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            height: 2.5rem;
+            width: 2.5rem;
+        }
+
+        div[data-for="text"] {
+            text-align: center;
+            padding: 1em;
+            font-size: 16px;
+            line-height: 24px;
+        }
+    }
+}

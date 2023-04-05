@@ -9,7 +9,9 @@ const reducer = (state, { type, status }) => {
         case 'filled':
             return { filled: status }
         case 'showPass':
-            return { showPass: status, filled: state.filled }
+            return { showPass: status, filled: state.filled, error: state.error }
+        case 'error':
+            return { error: status, filled: state.filled, showPass: state.showPass }
         default: return state
     }
 }
@@ -83,9 +85,10 @@ const ForgotComponent = () => {
                                         label={"Email address"}
                                         type={"email"}
                                         handleInput={handleInput}
+                                        error={state.error}
                                     />
 
-                                    <div className='error'><div>!</div> The user already exists.</div>
+                                    <div className='error'><div>!</div> The user not exists.</div>
                                 </div>
 
                                 <button type='submit'>Continue</button>

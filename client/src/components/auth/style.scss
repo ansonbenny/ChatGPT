@@ -57,6 +57,10 @@
             background: white;
         }
 
+        .warning-label {
+            color: red !important;
+        }
+
         .inputEffect {
             height: 52px;
             color: #2d333a;
@@ -77,6 +81,32 @@
 
         .active-input {
             position: static;
+        }
+
+        .warning-input {
+            border-color: red !important;
+        }
+
+        .error {
+            margin-top: 5px;
+            text-align: start;
+            color: red;
+            font-size: 12px;
+            display: flex;
+            flex-direction: row;
+
+            div {
+                display: flex;
+                flex-direction: column;
+                height: 1rem;
+                width: 1rem !important;
+                color: white;
+                background: red;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                margin-right: 5px;
+            }
         }
 
         //Input Effect
@@ -266,28 +296,6 @@
 
                     &:focus {
                         background: rgba(0, 123, 173, .15);
-                    }
-                }
-
-                .error {
-                    margin-top: 5px;
-                    text-align: start;
-                    color: red;
-                    font-size: 12px;
-                    display: flex;
-                    flex-direction: row;
-
-                    div {
-                        display: flex;
-                        flex-direction: column;
-                        height: 1rem;
-                        width: 1rem !important;
-                        color: white;
-                        background: red;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 50%;
-                        margin-right: 5px;
                     }
                 }
             }

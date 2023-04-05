@@ -4,30 +4,44 @@ import bcrypt from 'bcrypt'
 import { ObjectId } from "mongodb";
 
 export default {
-    signup: async (details) => {
+    signup: ({ email, pass, manual, pending }) => {
         return new Promise(async (resolve, reject) => {
-            let check = await db.collection(collections.USER).findOne({
-                email: details.email
-            }).catch((err) => {
-                reject(err)
-            })
 
-            if (!check) {
-                try {
-                    details.pass = await bcrypt.hash(details.pass, 10)
-                } catch (err) {
+            let done = null
+
+            try {
+
+                pass = await bcrypt.hash(pass, 10)
+
+                await db.collection(collections.USER).createIndex({ email: 1 }, { unique: true })
+
+                done = await db.collection(collections.USER).insertOne({
+                    email: email,
+                    pass: pass,
+                    manual: manual,
+                    pending: pending
+                })
+            } catch (err) {
+                if (err?.code === 11000) {
+                    done = await db.collection(collections.USER).findOneAndUpdate({
+                        email: email,
+                        pending: true
+                    }, {
+                        $set: {
+                            pass: pass,
+                            manual: manual
+                        }
+                    }).catch((err) => {
+                        reject(err)
+                    })
+                } else {
                     reject(err)
-                } finally {
-                    db.collection(collections.USER).insertOne(details)
-                        .then((done) => {
-                            resolve({ _id: done?.insertedId?.toString(), manual: details.manual })
-                        }).catch((err) => {
-                            reject(err)
-                        })
                 }
-            } else {
-                if (check?.pending) {
-                    resolve({ _id: check?.['_id'], manual: check?.['manual'] })
+            } finally {
+                if (done?.value) {
+                    resolve({ _id: done?.value?._id.toString(), manual })
+                } else if (done?.insertedId) {
+                    resolve({ _id: done?.insertedId?.toString(), manual })
                 } else {
                     reject({ exists: true, text: 'Email already used' })
                 }
@@ -65,6 +79,33 @@ export default {
             }).catch((err) => {
                 reject(err)
             })
+        })
+    },
+    login: ({ email, pass }) => {
+        return new Promise(async (resolve, reject) => {
+            let user = await db.collection(collections.USER).findOne({ email: email, pending: false })
+
+            if (user) {
+                let check
+                try {
+                    check = await bcrypt.compare(pass, user.pass)
+                } catch (err) {
+                    reject(err)
+                } finally {
+                    if (check) {
+                        user.pass = null
+                        resolve(user)
+                    } else {
+                        reject({
+                            status: 422
+                        })
+                    }
+                }
+            } else {
+                reject({
+                    status: 422
+                })
+            }
         })
     }
 }

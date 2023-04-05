@@ -9,14 +9,17 @@ const reducer = (state, { type, status }) => {
         case 'filled':
             return { filled: status }
         case 'showPass':
-            return { showPass: status, filled: state.filled }
+            return { showPass: status, filled: state.filled, error: state.error }
+        case 'error':
+            return { error: status, filled: state.filled, showPass: state.showPass }
         default: return state
     }
 }
 
 const LoginComponent = () => {
     const [state, dispatch] = useReducer(reducer, {
-        filled: false
+        filled: false,
+        error: false
     })
 
     const [formData, setFormData] = useState({
@@ -46,11 +49,6 @@ const LoginComponent = () => {
             labelRef.current?.classList.remove(...label)
             inputRef.current?.classList.remove(...input)
         }
-    }, [])
-
-    const passwordClass = useCallback((remove, add) => {
-        document.querySelector(remove).classList?.remove('active')
-        document.querySelector(add).classList?.add('active')
     }, [])
 
     return (
@@ -123,7 +121,6 @@ const LoginComponent = () => {
                                     type={"email"}
                                     isDisabled />
 
-                                <div className='error'><div>!</div> The user already exists.</div>
                             </div>
 
                             <div className="password">
@@ -136,8 +133,8 @@ const LoginComponent = () => {
                                     inputClass={inputClass}
                                     label={"Password"}
                                     type={"password"}
-                                    passwordClass={passwordClass}
                                     handleInput={handleInput}
+                                    error={state.error}
                                 />
 
                                 {
@@ -153,20 +150,8 @@ const LoginComponent = () => {
 
                             </div>
 
-                            <div id='alertBox'>
-                                Your password must contain:
-
-                                <p id='passAlertError' className='active'>
-                                    <span>&#x2022;</span>
-                                    &nbsp;
-                                    At least 8 characters
-                                </p>
-
-                                <p id='passAlertDone' className='active'>
-                                    <span><Tick /></span>
-                                    &nbsp;
-                                    At least 8 characters
-                                </p>
+                            <div>
+                                {state.error && <div className='error'><div>!</div> The user already exists.</div>}
                             </div>
 
                             <button type='submit'>Continue</button>

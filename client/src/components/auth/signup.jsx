@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useReducer, useRef, useState } from 'react'
-import { GptIcon, Eye, EyeHide, Tick, Google, Microsoft, Mail } from '../../assets'
+import { GptIcon, Tick, Google, Microsoft, Mail, EyeHide, Eye } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
 import FormFeild from './FormFeild'
 import axios from 'axios'
@@ -10,7 +10,7 @@ const reducer = (state, { type, status }) => {
     case 'filled':
       return { filled: status }
     case 'showPass':
-      return { showPass: status, filled: state.filled }
+      return { showPass: status, filled: state.filled, error: state.error }
     case 'error':
       return { error: status, filled: state.filled, showPass: state.showPass }
     case 'mail':
@@ -19,7 +19,7 @@ const reducer = (state, { type, status }) => {
   }
 }
 
-const SignupComponent = ({_id}) => {
+const SignupComponent = ({ _id }) => {
 
   const labelRef = useRef()
   const inputRef = useRef()
@@ -46,24 +46,26 @@ const SignupComponent = ({_id}) => {
 
   const formHandle = async (e) => {
     e.preventDefault()
-    let res = null
-    try {
-      res = await axios.post('/api/user/signup', formData)
-    } catch (err) {
-      console.log(err)
-      if (err?.['message']?.exists) {
-        dispatch({ type: 'error', status: true })
-      } else {
-        dispatch({ type: 'error', status: false })
-      }
-    } finally {
-      if (res?.['data']?.data?.manual) {
-        dispatch({ type: 'mail', status: true })
-      } else if (res) {
-        dispatch({ type: 'error', status: false })
-        if (res['data']?.data?._id) navigate(`/signup/pending/${res?.['data']._id}`)
-      } else {
-        dispatch({ type: 'error', status: true })
+    if (formData?.pass.length >= 8) {
+      let res = null
+      try {
+        res = await axios.post('/api/user/signup', formData)
+      } catch (err) {
+        console.log(err)
+        if (err?.['message']?.exists) {
+          dispatch({ type: 'error', status: true })
+        } else {
+          dispatch({ type: 'error', status: false })
+        }
+      } finally {
+        if (res?.['data']?.data?.manual) {
+          dispatch({ type: 'mail', status: true })
+        } else if (res) {
+          dispatch({ type: 'error', status: false })
+          if (res['data']?.data?._id) navigate(`/signup/pending/${res?.['data']._id}`)
+        } else {
+          dispatch({ type: 'error', status: true })
+        }
       }
     }
   }
@@ -156,8 +158,11 @@ const SignupComponent = ({_id}) => {
                         labelRef={null}
                         name={'email'}
                         type={"email"}
-                        isDisabled />
+                        isDisabled
+                        error={state.error} />
+                    </div>
 
+                    <div>
                       {state.error && <div className='error'><div>!</div> The user already exists.</div>}
                     </div>
 

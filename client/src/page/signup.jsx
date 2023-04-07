@@ -14,7 +14,7 @@ const Signup = () => {
   // if user not show
 
   useLayoutEffect(() => {
-    if (path === '/signup') {
+    if (path === '/signup' || path === '/signup/') {
       setPending(false)
     } else {
       const checkPending = async () => {
@@ -26,9 +26,13 @@ const Signup = () => {
             }
           })
         } catch (err) {
-          alert(err)
           console.log(err)
-          navigate('/signup')
+          if (err?.response?.status === 404) {
+            navigate('/404')
+          } else {
+            alert(err)
+            navigate('/signup')
+          }
         } finally {
           if (res) {
             setPending(true)

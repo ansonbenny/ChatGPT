@@ -1,4 +1,5 @@
 export default {
     CHAT: 'chat',
-    USER: 'user'
+    USER: 'user',
+    TEMP: 'temp'
 }

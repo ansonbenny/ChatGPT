@@ -1,29 +1,36 @@
-import React, { Fragment, useCallback, useReducer, useRef, useState } from 'react'
-import { GptIcon, Eye, EyeHide, Tick, Mail } from '../../assets'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { Fragment, useCallback, useReducer, useState } from 'react'
+import { GptIcon, Tick, Mail } from '../../assets'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import FormFeild from './FormFeild'
 import './style.scss'
 
 const reducer = (state, { type, status }) => {
     switch (type) {
-        case 'filled':
-            return { filled: status }
-        case 'showPass':
-            return { showPass: status, filled: state.filled, error: state.error }
+        case 'mail':
+            return { mail: status }
         case 'error':
-            return { error: status, filled: state.filled, showPass: state.showPass }
+            return { error: status }
         default: return state
     }
 }
 
-const ForgotComponent = () => {
+const ForgotComponent = ({ isRequest, userId, secret }) => {
     const [state, dispatch] = useReducer(reducer, {
-        filled: false
+        mail: false
     })
+
+    const navigate = useNavigate()
+
+    const passwordClass = useCallback((remove, add) => {
+        document.querySelector(remove).classList?.remove('active')
+        document.querySelector(add).classList?.add('active')
+    }, [])
 
     const [formData, setFormData] = useState({
         email: '',
-        pass: ''
+        newPass: '',
+        reEnter: ''
     })
 
     const handleInput = (e) => {
@@ -33,29 +40,53 @@ const ForgotComponent = () => {
         })
     }
 
-    const formHandle = () => {
-
+    const formHandleMail = async (e) => {
+        e.preventDefault()
+        let res = null
+        try {
+            res = await axios.post('/api/user/forgot-request', {
+                email: formData.email
+            })
+        } catch (err) {
+            console.log(err)
+            if (err?.response?.data?.status === 422) {
+                dispatch({ type: 'error', status: true })
+            }
+        } finally {
+            if (res) {
+                dispatch({ type: 'mail', status: true })
+            }
+        }
     }
 
-    const labelRef = useRef()
-    const inputRef = useRef()
+    const formHandleReset = async (e) => {
+        e.preventDefault()
+        if (userId && secret && formData?.newPass.length >= 8) {
+            if (formData?.newPass === formData?.reEnter) {
+                dispatch({ type: 'error', status: false })
 
-    const navigate = useNavigate()
-
-    const inputClass = useCallback((add, label, input) => {
-        if (add) {
-            labelRef.current?.classList.add(...label)
-            inputRef.current?.classList.add(...input)
-        } else {
-            labelRef.current?.classList.remove(...label)
-            inputRef.current?.classList.remove(...input)
+                let res = null
+                try {
+                    res = await axios.put('/api/user/forgot-finish', {
+                        userId,
+                        secret,
+                        newPass: formData.newPass,
+                        reEnter: formData.reEnter
+                    })
+                } catch (err) {
+                    console.log(err)
+                    alert(err)
+                    navigate('/forgot')
+                } finally {
+                    if (res) {
+                        navigate('/login')
+                    }
+                }
+            } else {
+                dispatch({ type: 'error', status: true })
+            }
         }
-    }, [])
-
-    const passwordClass = useCallback((remove, add) => {
-        document.querySelector(remove).classList?.remove('active')
-        document.querySelector(add).classList?.add('active')
-    }, [])
+    }
 
     return (
         <div className='Contain'>
@@ -64,61 +95,121 @@ const ForgotComponent = () => {
             </div>
 
             {
-                !state.mail ? (
+                isRequest ? (
+                    <Fragment>
+                        {
+                            !state.mail ? (
+                                <Fragment>
+                                    <div>
+                                        <h1>Reset your password</h1>
+
+                                        <p>Enter your email address and we will send you instructions to reset your password.</p>
+                                    </div>
+
+                                    <form className='Form' onSubmit={formHandleMail}>
+                                        <div>
+                                            <div className="emailForgot">
+
+                                                <FormFeild
+                                                    value={formData.email}
+                                                    name={'email'}
+                                                    label={"Email address"}
+                                                    type={"email"}
+                                                    handleInput={handleInput}
+                                                    error={state?.error}
+                                                />
+
+                                                {state?.error && <div className='error'><div>!</div> The user not exists.</div>}
+                                            </div>
+
+                                            <button type='submit'>Continue</button>
+
+                                            <div>
+                                                <button type='button' onClick={() => {
+                                                    navigate('/login/auth')
+                                                }} className='back'>Back to Apps Client</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </Fragment>
+                            )
+                                : (
+                                    <div className='mail'>
+                                        <div className='icon'>
+                                            <Mail />
+                                        </div>
+
+                                        <div>
+                                            <h3>Check Your Email</h3>
+                                        </div>
+
+                                        <div>
+                                            <p>Please check the email address {formData?.email} for instructions to reset your password.</p>
+                                        </div>
+
+                                        <button>Resend Mail</button>
+                                    </div >
+                                )
+                        }
+                    </Fragment>
+                ) : (
                     <Fragment>
                         <div>
-                            <h1>Reset your password</h1>
-
-                            <p>Enter your email address and we will send you instructions to reset your password.</p>
+                            <h1>Enter your password</h1>
+                            <p>Enter a new password below to change your password.</p>
                         </div>
-
-                        <form className='Form'>
+                        <form className='Form' onSubmit={formHandleReset}>
                             <div>
-                                <div className="emailForgot">
+                                <div className="password">
 
                                     <FormFeild
-                                        value={formData.email}
-                                        inputRef={inputRef}
-                                        labelRef={labelRef}
-                                        name={'email'}
-                                        inputClass={inputClass}
-                                        label={"Email address"}
-                                        type={"email"}
+                                        value={formData.newPass}
+                                        name={'newPass'}
+                                        label={"New password"}
+                                        type={"password"}
                                         handleInput={handleInput}
-                                        error={state.error}
+                                        passwordClass={passwordClass}
+                                        error={state?.error}
                                     />
 
-                                    <div className='error'><div>!</div> The user not exists.</div>
                                 </div>
 
-                                <button type='submit'>Continue</button>
+                                <div className="password">
 
-                                <div>
-                                    <button type='button' onClick={() => {
-                                        navigate('/login/auth')
-                                    }} className='back'>Back to Apps Client</button>
+                                    <FormFeild
+                                        value={formData.reEnter}
+                                        name={'reEnter'}
+                                        label={"Re-enter new password"}
+                                        type={"password"}
+                                        handleInput={handleInput}
+                                        error={state?.error}
+                                    />
+
                                 </div>
+
+                                {state?.error && <div className='error'><div>!</div> Password not match.</div>}
+
+                                <div id='alertBox'>
+                                    Your password must contain:
+
+                                    <p id='passAlertError' className='active'>
+                                        <span>&#x2022;</span>
+                                        &nbsp;
+                                        At least 8 characters
+                                    </p>
+
+                                    <p id='passAlertDone' className='active'>
+                                        <span><Tick /></span>
+                                        &nbsp;
+                                        At least 8 characters
+                                    </p>
+                                </div>
+
+                                <button type='submit'>Reset password</button>
                             </div>
                         </form>
                     </Fragment>
                 )
-                    : (
-                        <div className='mail'>
-                            <div className='icon'>
-                                <Mail />
-                            </div>
-
-                            <div>
-                                <h3>Check Your Email</h3>
-                            </div>
-
-                            <div>
-                                <p>Please check the email address ansonbenny14@gmail.com for instructions to reset your password.</p>
-                            </div>
-
-                            <button>Resend Mail</button>
-                        </div >
-                    )
             }
 
         </div >

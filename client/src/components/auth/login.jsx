@@ -1,6 +1,7 @@
-import React, { Fragment, useCallback, useReducer, useRef, useState } from 'react'
-import { GptIcon, Eye, EyeHide, Tick, Google, Microsoft } from '../../assets'
+import React, { useReducer, useState } from 'react'
+import { GptIcon, Google, Microsoft } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import FormFeild from './FormFeild'
 import './style.scss'
 
@@ -8,10 +9,8 @@ const reducer = (state, { type, status }) => {
     switch (type) {
         case 'filled':
             return { filled: status }
-        case 'showPass':
-            return { showPass: status, filled: state.filled, error: state.error }
         case 'error':
-            return { error: status, filled: state.filled, showPass: state.showPass }
+            return { error: status, filled: state.filled }
         default: return state
     }
 }
@@ -34,22 +33,25 @@ const LoginComponent = () => {
         })
     }
 
-    const formHandle = () => {
-
-    }
-
-    const labelRef = useRef()
-    const inputRef = useRef()
-
-    const inputClass = useCallback((add, label, input) => {
-        if (add) {
-            labelRef.current?.classList.add(...label)
-            inputRef.current?.classList.add(...input)
-        } else {
-            labelRef.current?.classList.remove(...label)
-            inputRef.current?.classList.remove(...input)
+    const formHandle = async (e) => {
+        e.preventDefault()
+        let res = null
+        try {
+            res = await axios.get('/api/user/login', {
+                params: formData
+            })
+        } catch (err) {
+            console.log(err)
+            if (err?.response?.data?.status === 422) {
+                dispatch({ type: 'error', status: true })
+            }
+        } finally {
+            if (res?.data) {
+                dispatch({ type: 'error', status: false })
+                console.log(res?.data)
+            }
         }
-    }, [])
+    }
 
     return (
         <div className='Contain'>
@@ -74,10 +76,7 @@ const LoginComponent = () => {
 
                                 <FormFeild
                                     value={formData.email}
-                                    inputRef={inputRef}
-                                    labelRef={labelRef}
                                     name={'email'}
-                                    inputClass={inputClass}
                                     label={"Email address"}
                                     type={"email"}
                                     handleInput={handleInput}
@@ -106,7 +105,7 @@ const LoginComponent = () => {
                         </div>
                     </div>
                 ) : (
-                    <form className='Form'>
+                    <form className='Form' onSubmit={formHandle}>
                         <div>
                             <div className="email">
                                 <button type='button' onClick={() => {
@@ -115,8 +114,6 @@ const LoginComponent = () => {
 
                                 <FormFeild
                                     value={formData.email}
-                                    inputRef={null}
-                                    labelRef={null}
                                     name={'email'}
                                     type={"email"}
                                     isDisabled />
@@ -127,31 +124,17 @@ const LoginComponent = () => {
 
                                 <FormFeild
                                     value={formData.pass}
-                                    inputRef={inputRef}
-                                    labelRef={labelRef}
                                     name={'pass'}
-                                    inputClass={inputClass}
                                     label={"Password"}
                                     type={"password"}
                                     handleInput={handleInput}
-                                    error={state.error}
+                                    error={state?.error}
                                 />
-
-                                {
-                                    state.showPass ? <button type='button' onClick={() => {
-                                        inputRef.current.type = "password"
-                                        dispatch({ type: 'showPass', status: false })
-                                    }}>{<EyeHide />}</button>
-                                        : <button type='button' onClick={() => {
-                                            inputRef.current.type = "text"
-                                            dispatch({ type: 'showPass', status: true })
-                                        }}><Eye /></button>
-                                }
 
                             </div>
 
                             <div>
-                                {state.error && <div className='error'><div>!</div> The user already exists.</div>}
+                                {state?.error && <div className='error'><div>!</div> Email or password wrong.</div>}
                             </div>
 
                             <button type='submit'>Continue</button>

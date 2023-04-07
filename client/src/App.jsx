@@ -67,6 +67,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup/pending/:id" element={<Signup />} />
           <Route path="/forgot" element={<Forgot />} />
+          <Route path="/forgot/set/:userId/:secret" element={<Forgot />} />
           <Route path="*" element={<Error />} />
         </Routes>
       </BrowserRouter>

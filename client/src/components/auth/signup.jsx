@@ -1,5 +1,5 @@
-import React, { Fragment, useCallback, useReducer, useRef, useState } from 'react'
-import { GptIcon, Tick, Google, Microsoft, Mail, EyeHide, Eye } from '../../assets'
+import React, { Fragment, useCallback, useReducer, useState } from 'react'
+import { GptIcon, Tick, Google, Microsoft, Mail, } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
 import FormFeild from './FormFeild'
 import axios from 'axios'
@@ -9,20 +9,15 @@ const reducer = (state, { type, status }) => {
   switch (type) {
     case 'filled':
       return { filled: status }
-    case 'showPass':
-      return { showPass: status, filled: state.filled, error: state.error }
     case 'error':
-      return { error: status, filled: state.filled, showPass: state.showPass }
+      return { error: status, filled: state.filled }
     case 'mail':
       return { mail: status, error: !status }
     default: return state
   }
 }
 
-const SignupComponent = ({ _id }) => {
-
-  const labelRef = useRef()
-  const inputRef = useRef()
+const SignupComponent = () => {
 
   const navigate = useNavigate()
 
@@ -52,33 +47,22 @@ const SignupComponent = ({ _id }) => {
         res = await axios.post('/api/user/signup', formData)
       } catch (err) {
         console.log(err)
-        if (err?.['message']?.exists) {
+        if (err?.response?.data.message?.exists) {
           dispatch({ type: 'error', status: true })
         } else {
           dispatch({ type: 'error', status: false })
         }
+
       } finally {
         if (res?.['data']?.data?.manual) {
           dispatch({ type: 'mail', status: true })
         } else if (res) {
           dispatch({ type: 'error', status: false })
           if (res['data']?.data?._id) navigate(`/signup/pending/${res?.['data']._id}`)
-        } else {
-          dispatch({ type: 'error', status: true })
         }
       }
     }
   }
-
-  const inputClass = useCallback((add, label, input) => {
-    if (add) {
-      labelRef.current?.classList.add(...label)
-      inputRef.current?.classList.add(...input)
-    } else {
-      labelRef.current?.classList.remove(...label)
-      inputRef.current?.classList.remove(...input)
-    }
-  }, [])
 
   const passwordClass = useCallback((remove, add) => {
     document.querySelector(remove).classList?.remove('active')
@@ -113,10 +97,7 @@ const SignupComponent = ({ _id }) => {
 
                       <FormFeild
                         value={formData.email}
-                        inputRef={inputRef}
-                        labelRef={labelRef}
                         name={'email'}
-                        inputClass={inputClass}
                         label={"Email address"}
                         type={"email"}
                         handleInput={handleInput}
@@ -154,42 +135,26 @@ const SignupComponent = ({ _id }) => {
 
                       <FormFeild
                         value={formData.email}
-                        inputRef={null}
-                        labelRef={null}
                         name={'email'}
                         type={"email"}
                         isDisabled
-                        error={state.error} />
+                        error={state?.error} />
                     </div>
 
                     <div>
-                      {state.error && <div className='error'><div>!</div> The user already exists.</div>}
+                      {state?.error && <div className='error'><div>!</div> The user already exists.</div>}
                     </div>
 
                     <div className="password">
 
                       <FormFeild
                         value={formData.pass}
-                        inputRef={inputRef}
-                        labelRef={labelRef}
                         name={'pass'}
-                        inputClass={inputClass}
                         label={"Password"}
                         type={"password"}
                         passwordClass={passwordClass}
                         handleInput={handleInput}
                       />
-
-                      {
-                        state.showPass ? <button type='button' onClick={() => {
-                          inputRef.current.type = "password"
-                          dispatch({ type: 'showPass', status: false })
-                        }}>{<EyeHide />}</button>
-                          : <button type='button' onClick={() => {
-                            inputRef.current.type = "text"
-                            dispatch({ type: 'showPass', status: true })
-                          }}><Eye /></button>
-                      }
 
                     </div>
 

@@ -1,8 +1,25 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useCallback, useRef, useState } from 'react'
+import { Eye, EyeHide } from '../../assets'
 
-const FormFeild = ({ labelRef, inputRef, label,
+const FormFeild = ({ label,
     value, name, type, handleInput,
-    inputClass, passwordClass, isDisabled, error }) => {
+    passwordClass, isDisabled, error }) => {
+
+    const [showPass, setShowPass] = useState(false)
+
+    let inputRef = useRef()
+    let labelRef = useRef()
+
+    const inputClass = useCallback((add, label, input) => {
+        if (add) {
+            labelRef.current?.classList.add(...label)
+            inputRef.current?.classList.add(...input)
+        } else {
+            labelRef.current?.classList.remove(...label)
+            inputRef.current?.classList.remove(...input)
+        }
+    }, [])
+
     return (
         <Fragment>
             {label && <label
@@ -40,6 +57,19 @@ const FormFeild = ({ labelRef, inputRef, label,
 
                 disabled={isDisabled} readOnly={isDisabled} required
             />
+
+            {
+                type === 'password' && <>
+                    {showPass ? <button type='button' onClick={() => {
+                        inputRef.current.type = "password"
+                        setShowPass(false)
+                    }}>{<EyeHide />}</button>
+                        : <button type='button' onClick={() => {
+                            inputRef.current.type = "text"
+                            setShowPass(true)
+                        }}><Eye /></button>}
+                </>
+            }
         </Fragment>
     )
 }

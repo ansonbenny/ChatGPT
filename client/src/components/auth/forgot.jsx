@@ -53,7 +53,9 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
                 dispatch({ type: 'error', status: true })
             }
         } finally {
-            if (res) {
+            if (res?.data?.status === 208) {
+                navigate('/')
+            } else if (res) {
                 dispatch({ type: 'mail', status: true })
             }
         }

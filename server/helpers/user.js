@@ -51,7 +51,8 @@ export default {
     checkPending: (_id) => {
         return new Promise((resolve, reject) => {
             db.collection(collections.USER).findOne({
-                _id: new ObjectId(_id)
+                _id: new ObjectId(_id),
+                pending: true
             }).then((data) => {
                 if (data?.pending) {
                     delete data.pass
@@ -70,13 +71,15 @@ export default {
         return new Promise((resolve, reject) => {
             db.collection(collections.USER).updateOne({
                 _id: new ObjectId(_id)
-            }, {
-                $set: {
+            }, [{
+                $project: {
                     fName: fName,
                     lName: lName,
-                    pending: false
+                    email: '$email',
+                    pass: '$pass',
+                    _id: '$_id'
                 }
-            }).then((done) => {
+            }]).then((done) => {
                 if (done?.modifiedCount > 0) {
                     resolve(done)
                 } else {
@@ -89,7 +92,7 @@ export default {
     },
     login: ({ email, pass }) => {
         return new Promise(async (resolve, reject) => {
-            let user = await db.collection(collections.USER).findOne({ email: email, pending: false })
+            let user = await db.collection(collections.USER).findOne({ email: email, pending: { $exists: false } })
 
             if (user) {
                 let check
@@ -100,8 +103,6 @@ export default {
                 } finally {
                     if (check) {
                         delete user.pass
-                        delete user.pending
-                        delete user.manual
                         resolve(user)
                     } else {
                         reject({
@@ -118,7 +119,7 @@ export default {
     },
     forgotRequest: ({ email }, secret) => {
         return new Promise(async (resolve, reject) => {
-            let user = await db.collection(collections.USER).findOne({ email: email, pending: false })
+            let user = await db.collection(collections.USER).findOne({ email: email, pending: { $exists: false } })
                 .catch((err) => reject(err))
 
             if (user) {
@@ -201,7 +202,7 @@ export default {
                     newPass = await bcrypt.hash(newPass, 10)
                     done = await db.collection(collections.USER).updateOne({
                         _id: new ObjectId(userId),
-                        pending: false
+                        pending: { $exists: false }
                     }, {
                         $set: {
                             pass: newPass
@@ -240,6 +241,20 @@ export default {
                 resolve(check)
             } else {
                 reject({ status: 404 })
+            }
+        })
+    },
+    checkUserFound: ({ _id }) => {
+        return new Promise(async (resolve, reject) => {
+            let user = await db.collection(collections.USER).findOne({ _id: new ObjectId(_id), pending: { $exists: false } })
+                .catch((err) => {
+                    reject(err)
+                })
+
+            if (user) {
+                resolve(user)
+            } else {
+                reject({ text: 'Not found' })
             }
         })
     }

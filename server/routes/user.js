@@ -1,11 +1,37 @@
 import { Router } from "express";
 import sendMail from '../mail/send.js'
 import user from "../helpers/user.js";
+import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import path from 'path'
 let router = Router()
 
-router.post('/signup', async (req, res) => {
+const CheckLogged = async (req, res, next) => {
+    jwt.verify(req.cookies?.token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+        if (decoded) {
+            let userData = await user.checkUserFound(decoded).catch((err) => {
+                res.status(500).json({
+                    status: 500,
+                    message: err
+                })
+            })
+
+            if (userData) {
+                res.status(208).json({
+                    status: 208,
+                    message: 'Already Logged'
+                })
+            } else {
+                next()
+            }
+
+        } else {
+            next()
+        }
+    })
+}
+
+router.post('/signup', CheckLogged, async (req, res) => {
     if (req.body?.email) {
         if (req.body?.pass.length >= 8) {
             req.body.pending = true
@@ -80,7 +106,7 @@ router.post('/signup', async (req, res) => {
     }
 })
 
-router.get('/checkPending', async (req, res) => {
+router.get('/checkPending', CheckLogged, async (req, res) => {
     const { _id } = req.query
     let response = null
     if (_id?.length === 24) {
@@ -120,7 +146,7 @@ router.get('/checkPending', async (req, res) => {
     }
 })
 
-router.put('/signup-finish', async (req, res) => {
+router.put('/signup-finish', CheckLogged, async (req, res) => {
     let response = null
     try {
         response = await user.finishSignup(req.body)
@@ -140,7 +166,7 @@ router.put('/signup-finish', async (req, res) => {
     }
 })
 
-router.get('/login', async (req, res) => {
+router.get('/login', CheckLogged, async (req, res) => {
     if (req.query?.email && req.query?.pass) {
         req.query.email = req.query.email.toLowerCase()
         let response = null
@@ -160,11 +186,20 @@ router.get('/login', async (req, res) => {
             }
         } finally {
             if (response) {
-                res.status(200).json({
-                    status: 200,
-                    message: 'Success',
-                    data: response
+                let token = jwt.sign({
+                    _id: response._id,
+                    email: response.email
+                }, process.env.JWT_PRIVATE_KEY, {
+                    expiresIn: '15m'
                 })
+
+                res.status(200)
+                    .cookie("token", token, { httpOnly: true, expires: new Date(Date.now() + 900000) })
+                    .json({
+                        status: 200,
+                        message: 'Success',
+                        data: response
+                    })
             }
         }
     } else {
@@ -175,7 +210,7 @@ router.get('/login', async (req, res) => {
     }
 })
 
-router.post('/forgot-request', async (req, res) => {
+router.post('/forgot-request', CheckLogged, async (req, res) => {
     if (req.body?.email) {
         let secret = Math.random().toString(16)
         secret = secret.replace('0.', '')
@@ -229,7 +264,7 @@ router.post('/forgot-request', async (req, res) => {
     }
 })
 
-router.get('/forgot-check', async (req, res) => {
+router.get('/forgot-check', CheckLogged, async (req, res) => {
     if (req.query?.userId && req.query?.secret) {
         let response = null
         try {
@@ -262,7 +297,7 @@ router.get('/forgot-check', async (req, res) => {
     }
 })
 
-router.put('/forgot-finish', async (req, res) => {
+router.put('/forgot-finish', CheckLogged, async (req, res) => {
     if (req.body?.userId && req.body?.secret) {
 
         if (req.body?.newPass?.length >= 8 && req.body?.reEnter
@@ -303,6 +338,17 @@ router.put('/forgot-finish', async (req, res) => {
             message: 'Wrong Verification'
         })
     }
+})
+
+router.get('/checkUserLogged', CheckLogged, (req, res) => {
+    res.status(405).json({
+        status: 405,
+        message: 'Not Logged User'
+    })
+})
+
+router.get('/logout', (req, res) => {
+
 })
 
 export default router

@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import dotnet from 'dotenv'
 import { connectDB } from './db/connection.js'
 import OpenAiRoute from './routes/openai.js'
@@ -10,7 +11,8 @@ dotnet.config()
 let app = express()
 let port = process.env.PORT
 
-app.use(cors())
+app.use(cors({ credentials: true, origin: process.env.SITE_URL }))
+app.use(cookieParser())
 app.use(express.json({ limit: '50mb' }))
 
 app.use('/api/openai', OpenAiRoute)

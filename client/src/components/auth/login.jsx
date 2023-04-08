@@ -38,6 +38,7 @@ const LoginComponent = () => {
         let res = null
         try {
             res = await axios.get('/api/user/login', {
+                withCredentials: true,
                 params: formData
             })
         } catch (err) {

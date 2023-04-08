@@ -26,7 +26,9 @@ const RegisterPendings = ({ _id }) => {
         console.log(err)
         alert(err)
       } finally {
-        if (res) {
+        if (res?.data?.status === 208) {
+          navigate('/')
+        } else if (res) {
           navigate('/login')
         }
       }

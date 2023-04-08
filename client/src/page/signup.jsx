@@ -34,7 +34,9 @@ const Signup = () => {
             navigate('/signup')
           }
         } finally {
-          if (res) {
+          if (res?.data?.status === 208) {
+            navigate('/')
+          } else if (res) {
             setPending(true)
           }
         }

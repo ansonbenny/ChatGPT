@@ -54,7 +54,9 @@ const SignupComponent = () => {
         }
 
       } finally {
-        if (res?.['data']?.data?.manual) {
+        if (res?.data?.status === 208) {
+          navigate('/')
+        } else if (res?.['data']?.data?.manual) {
           dispatch({ type: 'mail', status: true })
         } else if (res) {
           dispatch({ type: 'error', status: false })
@@ -118,7 +120,7 @@ const SignupComponent = () => {
                       <span>OR</span>
                     </div>
 
-                    <div className="btns">
+                    <div className="btns" id='options'>
                       <button><Google /> Continue with Google</button>
                       <button><Microsoft /> Continue with Microsoft Account</button>
                     </div>

@@ -32,7 +32,9 @@ const Forgot = () => {
                         navigate('/forgot')
                     }
                 } finally {
-                    if (res) {
+                    if (res?.data?.status === 208) {
+                        navigate('/')
+                    } else if (res) {
                         setIsRequest(false)
                     }
                 }
@@ -41,7 +43,7 @@ const Forgot = () => {
             getResponse()
         }
     }, [path])
-    
+
     return (
         <div className='Auth'>
             <div className="inner">

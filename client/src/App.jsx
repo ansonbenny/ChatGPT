@@ -3,8 +3,11 @@ import { Menu } from "./components"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Error, Forgot, Login, Main, Signup } from "./page"
 import Loading from "./components/loading/loading"
+import axios from 'axios'
 
 const App = () => {
+  let path = window.location.pathname
+
   const [darkMode, setDarkMode] = useState(false)
 
   const [history, setHistory] = useState([{
@@ -41,6 +44,10 @@ const App = () => {
     }
 
   })
+
+  useLayoutEffect(() => {
+
+  }, [path])
 
   /// Loading
 

@@ -90,24 +90,29 @@ export default {
             })
         })
     },
-    login: ({ email, pass }) => {
+    login: ({ email, pass, manual }) => {
         return new Promise(async (resolve, reject) => {
             let user = await db.collection(collections.USER).findOne({ email: email, pending: { $exists: false } })
 
             if (user) {
-                let check
-                try {
-                    check = await bcrypt.compare(pass, user.pass)
-                } catch (err) {
-                    reject(err)
-                } finally {
-                    if (check) {
-                        delete user.pass
-                        resolve(user)
-                    } else {
-                        reject({
-                            status: 422
-                        })
+                if (manual === 'false') {
+                    delete user.pass
+                    resolve(user)
+                } else {
+                    let check
+                    try {
+                        check = await bcrypt.compare(pass, user.pass)
+                    } catch (err) {
+                        reject(err)
+                    } finally {
+                        if (check) {
+                            delete user.pass
+                            resolve(user)
+                        } else {
+                            reject({
+                                status: 422
+                            })
+                        }
                     }
                 }
             } else {

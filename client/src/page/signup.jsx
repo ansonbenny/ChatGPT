@@ -1,50 +1,60 @@
 import axios from 'axios'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RegisterPendings, SignupComponent } from '../components'
+import { setLoading } from '../redux/loading'
 import './style.scss'
 
 const Signup = () => {
   const [pending, setPending] = useState(false)
   const { id } = useParams()
+  const { user } = useSelector((state) => state)
+  const dispatch = useDispatch()
   const path = window.location.pathname
 
   const navigate = useNavigate()
 
-  // if user not show
-
-  useLayoutEffect(() => {
-    if (path === '/signup' || path === '/signup/') {
-      setPending(false)
-    } else {
-      const checkPending = async () => {
-        let res = null
-        try {
-          res = await axios.get('/api/user/checkPending', {
-            params: {
-              _id: id
+  useEffect(() => {
+    if (!user) {
+      if (path === '/signup' || path === '/signup/') {
+        setPending(false)
+        setTimeout(() => {
+          dispatch(setLoading(false))
+        }, 1000)
+      } else {
+        const checkPending = async () => {
+          let res = null
+          try {
+            res = await axios.get('/api/user/checkPending', {
+              params: {
+                _id: id
+              }
+            })
+          } catch (err) {
+            console.log(err)
+            if (err?.response?.status === 404) {
+              navigate('/404')
+            } else {
+              alert(err)
+              navigate('/signup')
             }
-          })
-        } catch (err) {
-          console.log(err)
-          if (err?.response?.status === 404) {
-            navigate('/404')
-          } else {
-            alert(err)
-            navigate('/signup')
-          }
-        } finally {
-          if (res?.data?.status === 208) {
-            navigate('/')
-          } else if (res) {
-            setPending(true)
+          } finally {
+            if (res?.data?.status === 208) {
+              navigate('/')
+            } else if (res) {
+              setPending(true)
+              setTimeout(() => {
+                dispatch(setLoading(false))
+              }, 1000)
+            }
           }
         }
-      }
 
-      checkPending()
+        checkPending()
+      }
     }
-  }, [path])
+  }, [path, user])
 
   return (
     <div className='Auth'>

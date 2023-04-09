@@ -4,6 +4,9 @@ import {
   Moon, Plus, Tab, Trash, Xicon
 } from '../../assets/'
 import './style.scss'
+import axios from 'axios'
+import { emptyUser } from '../../redux/user'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
@@ -11,6 +14,24 @@ const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
   const btnRef = useRef(null)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const logOut = async () => {
+    if (window.confirm("Do you want log out")) {
+      let res = null
+      try {
+        res = await axios.get('/api/user/logout')
+      } catch (err) {
+        alert(err)
+      } finally {
+        if (res?.data?.status === 200) {
+          alert("Done")
+          dispatch(emptyUser())
+          navigate('/login')
+        }
+      }
+    }
+  }
 
   const showMenuMd = () => {
     menuRef.current.classList.add("showMd")
@@ -102,7 +123,7 @@ const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
               : <button onClick={() => changeColorMode(false)}><Light />Light mode</button>
           }
           <button>{<Tab />}Updates & FAQ</button>
-          <button onClick={() => alert("You can't logout its guest account")} >
+          <button onClick={logOut} >
             {<LogOut />}Log out
           </button>
         </div>

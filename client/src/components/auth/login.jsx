@@ -4,6 +4,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import FormFeild from './FormFeild'
 import './style.scss'
+import { useGoogleLogin } from '@react-oauth/google'
+import { useDispatch } from 'react-redux'
+import { insertUser } from '../../redux/user'
 
 const reducer = (state, { type, status }) => {
     switch (type) {
@@ -16,14 +19,19 @@ const reducer = (state, { type, status }) => {
 }
 
 const LoginComponent = () => {
-    const [state, dispatch] = useReducer(reducer, {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const [state, stateAction] = useReducer(reducer, {
         filled: false,
         error: false
     })
 
     const [formData, setFormData] = useState({
         email: '',
-        pass: ''
+        pass: '',
+        manual: true
     })
 
     const handleInput = (e) => {
@@ -33,23 +41,33 @@ const LoginComponent = () => {
         })
     }
 
-    const formHandle = async (e) => {
-        e.preventDefault()
+    const googleAuth = useGoogleLogin({
+        onSuccess: response => {
+            formHandle(null, {
+                manual: false,
+                token: response.access_token
+            })
+        }
+    })
+
+    const formHandle = async (e, googleData) => {
+        e?.preventDefault()
         let res = null
         try {
             res = await axios.get('/api/user/login', {
                 withCredentials: true,
-                params: formData
+                params: googleData || formData
             })
         } catch (err) {
             console.log(err)
             if (err?.response?.data?.status === 422) {
-                dispatch({ type: 'error', status: true })
+                stateAction({ type: 'error', status: true })
             }
         } finally {
             if (res?.data) {
-                dispatch({ type: 'error', status: false })
-                console.log(res?.data)
+                stateAction({ type: 'error', status: false })
+                dispatch(insertUser(res.data.data))
+                navigate('/')
             }
         }
     }
@@ -71,7 +89,7 @@ const LoginComponent = () => {
                     <div className='options'>
                         <form className="manual" onSubmit={(e) => {
                             e.preventDefault()
-                            dispatch({ type: 'filled', status: true })
+                            stateAction({ type: 'filled', status: true })
                         }}>
                             <div>
 
@@ -99,7 +117,7 @@ const LoginComponent = () => {
                             </div>
 
                             <div className="btns">
-                                <button><Google /> Continue with Google</button>
+                                <button onClick={googleAuth} ><Google /> Continue with Google</button>
                                 <button><Microsoft /> Continue with Microsoft Account</button>
                             </div>
 
@@ -110,7 +128,7 @@ const LoginComponent = () => {
                         <div>
                             <div className="email">
                                 <button type='button' onClick={() => {
-                                    dispatch({ type: 'filled', status: false })
+                                    stateAction({ type: 'filled', status: false })
                                 }} >Edit</button>
 
                                 <FormFeild

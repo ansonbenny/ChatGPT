@@ -16,7 +16,7 @@ const reducer = (state, { type, status }) => {
 }
 
 const ForgotComponent = ({ isRequest, userId, secret }) => {
-    const [state, dispatch] = useReducer(reducer, {
+    const [state, stateAction] = useReducer(reducer, {
         mail: false
     })
 
@@ -50,13 +50,13 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
         } catch (err) {
             console.log(err)
             if (err?.response?.data?.status === 422) {
-                dispatch({ type: 'error', status: true })
+                stateAction({ type: 'error', status: true })
             }
         } finally {
             if (res?.data?.status === 208) {
                 navigate('/')
             } else if (res) {
-                dispatch({ type: 'mail', status: true })
+                stateAction({ type: 'mail', status: true })
             }
         }
     }
@@ -65,7 +65,7 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
         e.preventDefault()
         if (userId && secret && formData?.newPass.length >= 8) {
             if (formData?.newPass === formData?.reEnter) {
-                dispatch({ type: 'error', status: false })
+                stateAction({ type: 'error', status: false })
 
                 let res = null
                 try {
@@ -85,7 +85,7 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
                     }
                 }
             } else {
-                dispatch({ type: 'error', status: true })
+                stateAction({ type: 'error', status: true })
             }
         }
     }

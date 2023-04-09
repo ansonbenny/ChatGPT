@@ -1,23 +1,34 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { GptIcon } from '../assets'
 import { LoginComponent } from '../components'
+import { setLoading } from '../redux/loading'
 
 const Login = () => {
   const [auth, setAuth] = useState(false)
+  const { user } = useSelector((state) => state)
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
   const path = window.location.pathname
-  // if user not show
 
-  useLayoutEffect(() => {
-    if (path === '/login/auth') {
-      setAuth(true)
-    } else {
-      setAuth(false)
+  useEffect(() => {
+    if (!user) {
+      if (path === '/login/auth') {
+        setAuth(true)
+        setTimeout(() => {
+          dispatch(setLoading(false))
+        }, 1000)
+      } else {
+        setAuth(false)
+        setTimeout(() => {
+          dispatch(setLoading(false))
+        }, 1000)
+      }
     }
-  }, [path])
+  }, [path, user])
 
   return (
     <div className='Auth'>

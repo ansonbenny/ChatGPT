@@ -1,48 +1,61 @@
 import axios from 'axios'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ForgotComponent } from '../components'
+import { setLoading } from '../redux/loading'
 
 const Forgot = () => {
     const { userId = null, secret = null } = useParams()
+    const { user } = useSelector((state) => state)
+
     const path = window.location.pathname
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [isRequest, setIsRequest] = useState(true)
-    // if user not show
-    useLayoutEffect(() => {
-        if (path === '/forgot/' || path === '/forgot') {
-            setIsRequest(true)
-        } else {
-            const getResponse = async () => {
-                let res = null
 
-                try {
-                    res = await axios.get('/api/user/forgot-check', {
-                        params: {
-                            userId,
-                            secret
+    useEffect(() => {
+        if (!user) {
+            if (path === '/forgot/' || path === '/forgot') {
+                setIsRequest(true)
+                setTimeout(() => {
+                    dispatch(setLoading(false))
+                }, 1000)
+            } else {
+                const getResponse = async () => {
+                    let res = null
+
+                    try {
+                        res = await axios.get('/api/user/forgot-check', {
+                            params: {
+                                userId,
+                                secret
+                            }
+                        })
+                    } catch (err) {
+                        console.log(err)
+                        if (err?.response?.status === 404) {
+                            navigate('/404')
+                        } else {
+                            alert(err)
+                            navigate('/forgot')
                         }
-                    })
-                } catch (err) {
-                    console.log(err)
-                    if (err?.response?.status === 404) {
-                        navigate('/404')
-                    } else {
-                        alert(err)
-                        navigate('/forgot')
-                    }
-                } finally {
-                    if (res?.data?.status === 208) {
-                        navigate('/')
-                    } else if (res) {
-                        setIsRequest(false)
+                    } finally {
+                        if (res?.data?.status === 208) {
+                            navigate('/')
+                        } else if (res) {
+                            setIsRequest(false)
+                            setTimeout(() => {
+                                dispatch(setLoading(false))
+                            }, 1000)
+                        }
                     }
                 }
-            }
 
-            getResponse()
+                getResponse()
+            }
         }
-    }, [path])
+    }, [path, user])
 
     return (
         <div className='Auth'>

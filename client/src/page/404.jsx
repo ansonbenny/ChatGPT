@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { setLoading } from '../redux/loading'
 import './style.scss'
 
 const Error = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        setTimeout(() => {
+            dispatch(setLoading(false))
+        }, 1000)
+    }, [])
     return (
         <div className='Error'>
             <div className="flex">

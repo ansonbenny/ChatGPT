@@ -8,9 +8,9 @@ import './style.scss'
 const Chat = forwardRef(({ error, response }, ref) => {
   const contentRef = useRef()
 
-  const loadResponse = (dispatch) => {
+  const loadResponse = (stateAction) => {
 
-    dispatch({ type: 'resume', status: true })
+    stateAction({ type: 'resume', status: true })
 
     contentRef.current.classList.add("blink")
 
@@ -25,15 +25,15 @@ const Chat = forwardRef(({ error, response }, ref) => {
         }
         index++
       } else {
-        stopResponse(dispatch)
+        stopResponse(stateAction)
       }
     }, 20)
 
   }
 
-  const stopResponse = (dispatch) => {
+  const stopResponse = (stateAction) => {
     contentRef.current.classList.remove('blink')
-    dispatch({ type: 'resume', status: false })
+    stateAction({ type: 'resume', status: false })
     clearInterval(window.interval)
   }
 

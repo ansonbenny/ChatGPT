@@ -1,6 +1,7 @@
 import React, { Fragment, useCallback, useReducer, useState } from 'react'
 import { GptIcon, Tick, Google, Microsoft, Mail, } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
+import { useGoogleLogin } from '@react-oauth/google'
 import FormFeild from './FormFeild'
 import axios from 'axios'
 import './style.scss'
@@ -21,7 +22,7 @@ const SignupComponent = () => {
 
   const navigate = useNavigate()
 
-  const [state, dispatch] = useReducer(reducer, {
+  const [state, stateAction] = useReducer(reducer, {
     filled: false,
     error: false
   })
@@ -48,23 +49,50 @@ const SignupComponent = () => {
       } catch (err) {
         console.log(err)
         if (err?.response?.data.message?.exists) {
-          dispatch({ type: 'error', status: true })
+          stateAction({ type: 'error', status: true })
         } else {
-          dispatch({ type: 'error', status: false })
+          stateAction({ type: 'error', status: false })
         }
 
       } finally {
         if (res?.data?.status === 208) {
           navigate('/')
         } else if (res?.['data']?.data?.manual) {
-          dispatch({ type: 'mail', status: true })
+          stateAction({ type: 'mail', status: true })
         } else if (res) {
-          dispatch({ type: 'error', status: false })
-          if (res['data']?.data?._id) navigate(`/signup/pending/${res?.['data']._id}`)
+          stateAction({ type: 'error', status: false })
+          if (res['data']?.data?._id) navigate(`/signup/pending/${res?.['data']?.data._id}`)
         }
       }
     }
   }
+
+  const googleAuth = useGoogleLogin({
+    onSuccess: async response => {
+      let res = null
+      try {
+        res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: {
+            "Authorization": `Bearer ${response.access_token}`
+          }
+        })
+      } catch (err) {
+        console.log(err)
+      } finally {
+        if (res?.data?.email_verified) {
+          setFormData({
+            ...formData,
+            manual: false,
+            email: res.data.email,
+            token: response.access_token
+          })
+
+          stateAction({ type: 'filled', status: true })
+        }
+      }
+
+    }
+  })
 
   const passwordClass = useCallback((remove, add) => {
     document.querySelector(remove).classList?.remove('active')
@@ -93,7 +121,7 @@ const SignupComponent = () => {
                   <form className="manual" onSubmit={(e) => {
                     e.preventDefault()
                     setFormData({ ...formData, manual: true })
-                    dispatch({ type: 'filled', status: true })
+                    stateAction({ type: 'filled', status: true })
                   }}>
                     <div>
 
@@ -121,7 +149,7 @@ const SignupComponent = () => {
                     </div>
 
                     <div className="btns" id='options'>
-                      <button><Google /> Continue with Google</button>
+                      <button onClick={googleAuth}><Google /> Continue with Google</button>
                       <button><Microsoft /> Continue with Microsoft Account</button>
                     </div>
 
@@ -132,7 +160,7 @@ const SignupComponent = () => {
                   <div>
                     <div className="email">
                       <button type='button' onClick={() => {
-                        dispatch({ type: 'filled', status: false })
+                        stateAction({ type: 'filled', status: false })
                       }} >Edit</button>
 
                       <FormFeild

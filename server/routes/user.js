@@ -2,6 +2,7 @@ import { Router } from "express";
 import sendMail from '../mail/send.js'
 import user from "../helpers/user.js";
 import jwt from 'jsonwebtoken'
+import axios from 'axios'
 import fs from 'fs'
 import path from 'path'
 let router = Router()
@@ -17,9 +18,11 @@ const CheckLogged = async (req, res, next) => {
             })
 
             if (userData) {
+                delete userData.pass
                 res.status(208).json({
                     status: 208,
-                    message: 'Already Logged'
+                    message: 'Already Logged',
+                    data: userData
                 })
             } else {
                 next()
@@ -31,67 +34,104 @@ const CheckLogged = async (req, res, next) => {
     })
 }
 
+router.get('/checkLogged', CheckLogged, (req, res) => {
+    res.status(405).json({
+        status: 405,
+        message: 'Not Logged'
+    })
+})
+
 router.post('/signup', CheckLogged, async (req, res) => {
-    if (req.body?.email) {
-        if (req.body?.pass.length >= 8) {
-            req.body.pending = true
-            req.body.email = req.body.email.toLowerCase()
-            let response = null
+    const Continue = async () => {
+        let response = null
 
-            try {
-                response = await user.signup(req.body)
-            } catch (err) {
-                if (err?.exists) {
-                    res.status(400).json({
-                        status: 400,
-                        message: err
-                    })
-                } else {
-                    res.status(500).json({
-                        status: 500,
-                        message: err
-                    })
+        try {
+            response = await user.signup(req.body)
+        } catch (err) {
+            if (err?.exists) {
+                res.status(400).json({
+                    status: 400,
+                    message: err
+                })
+            } else {
+                res.status(500).json({
+                    status: 500,
+                    message: err
+                })
+            }
+        } finally {
+            if (response?.manual) {
+                fs.readFile(`${path.resolve(path.dirname(''))}/mail/template.html`, 'utf8', (err, html) => {
+                    if (!err) {
+
+                        html = html.replace('[URL]', `${process.env.SITE_URL}/signup/pending/${response._id}`)
+                        html = html.replace('[TITLE]', 'Verify your email address')
+                        html = html.replace('[CONTENT]', 'To continue setting up your OpenAI account, please verify that this is your email address.')
+                        html = html.replace('[BTN_NAME]', 'Verify email address')
+
+                        sendMail({
+                            to: req.body.email,
+                            subject: `OpenAI - Verify your email`,
+                            html
+                        })
+
+                    } else {
+                        console.log(err)
+                    }
+                })
+
+                res.status(200).json({
+                    status: 200,
+                    message: 'Success',
+                    data: {
+                        _id: response.manual && response._id || null,
+                        manual: response.manual || false
+                    }
+                })
+            } else if (response) {
+                res.status(200).json({
+                    status: 200,
+                    message: 'Success',
+                    data: {
+                        _id: response._id,
+                        manual: response.manual || false
+                    }
+                })
+            }
+        }
+    }
+
+    if (req.body?.manual === false) {
+        let response = null
+        try {
+            response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+                headers: {
+                    "Authorization": `Bearer ${req.body.token}`
                 }
-            } finally {
-                if (response?.manual) {
-                    fs.readFile(`${path.resolve(path.dirname(''))}/mail/template.html`, 'utf8', (err, html) => {
-                        if (!err) {
-
-                            html = html.replace('[URL]', `${process.env.SITE_URL}/signup/pending/${response._id}`)
-                            html = html.replace('[TITLE]', 'Verify your email address')
-                            html = html.replace('[CONTENT]', 'To continue setting up your OpenAI account, please verify that this is your email address.')
-                            html = html.replace('[BTN_NAME]', 'Verify email address')
-
-                            sendMail({
-                                to: req.body.email,
-                                subject: `OpenAI - Verify your email`,
-                                html
-                            })
-
-                        } else {
-                            console.log(err)
-                        }
-                    })
-
-                    res.status(200).json({
-                        status: 200,
-                        message: 'Success',
-                        data: {
-                            _id: response.manual && response._id || null,
-                            manual: response.manual || false
-                        }
-                    })
-                } else if (response) {
-                    res.status(200).json({
-                        status: 200,
-                        message: 'Success',
-                        data: {
-                            _id: response.manual && response._id || null,
-                            manual: response.manual || false
-                        }
+            })
+        } catch (err) {
+            res.status(500).json({
+                status: 500,
+                message: err
+            })
+        } finally {
+            if (response?.data.email_verified) {
+                if (req.body?.email === response?.data.email) {
+                    Continue()
+                } else {
+                    res.status(422).json({
+                        status: 422,
+                        message: 'Something Wrong'
                     })
                 }
             }
+        }
+    } else if (req.body?.email) {
+        if (req.body?.pass.length >= 8) {
+            req.body.pending = true
+            req.body.email = req.body.email.toLowerCase()
+
+            Continue()
         } else {
             res.status(422).json({
                 status: 422,
@@ -167,8 +207,7 @@ router.put('/signup-finish', CheckLogged, async (req, res) => {
 })
 
 router.get('/login', CheckLogged, async (req, res) => {
-    if (req.query?.email && req.query?.pass) {
-        req.query.email = req.query.email.toLowerCase()
+    const Continue = async () => {
         let response = null
         try {
             response = await user.login(req.query)
@@ -190,11 +229,11 @@ router.get('/login', CheckLogged, async (req, res) => {
                     _id: response._id,
                     email: response.email
                 }, process.env.JWT_PRIVATE_KEY, {
-                    expiresIn: '15m'
+                    expiresIn: '24h'
                 })
 
                 res.status(200)
-                    .cookie("token", token, { httpOnly: true, expires: new Date(Date.now() + 900000) })
+                    .cookie("token", token, { httpOnly: true, expires: new Date(Date.now() + 86400000) })
                     .json({
                         status: 200,
                         message: 'Success',
@@ -202,12 +241,37 @@ router.get('/login', CheckLogged, async (req, res) => {
                     })
             }
         }
+    }
+
+    if (req.query?.manual === 'false') {
+        let response = null
+        try {
+            response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+                headers: {
+                    "Authorization": `Bearer ${req.query.token}`
+                }
+            })
+        } catch (err) {
+            res.status(500).json({
+                status: 500,
+                message: err
+            })
+        } finally {
+            if (response?.data.email_verified) {
+                req.query.email = response?.data.email
+                Continue()
+            }
+        }
+    } else if (req.query?.email && req.query?.pass) {
+        req.query.email = req.query.email.toLowerCase()
+        Continue()
     } else {
         res.status(422).json({
             status: 422,
             message: 'Email or password wrong'
         })
     }
+
 })
 
 router.post('/forgot-request', CheckLogged, async (req, res) => {
@@ -348,7 +412,10 @@ router.get('/checkUserLogged', CheckLogged, (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-
+    res.clearCookie('token').status(200).json({
+        status: 200,
+        message: 'LogOut'
+    })
 })
 
 export default router

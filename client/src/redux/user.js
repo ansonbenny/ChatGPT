@@ -1,10 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-let INITIAL_STATE = null
-
 let userSlice = createSlice({
     name: 'user',
-    initialState: INITIAL_STATE,
+    initialState: null,
     reducers: {
         insertUser: (state, action) => {
             return action.payload

@@ -1,31 +1,26 @@
 import { useEffect, useLayoutEffect, useState } from "react"
 import { Menu } from "./components"
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import { Error, Forgot, Login, Main, Signup, Offline } from "./page"
+import { Error, Forgot, Login, Main, Signup } from "./page"
 import Loading from "./components/loading/loading"
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { setLoading } from "./redux/loading"
 import { emptyUser, insertUser } from "./redux/user"
+import { emptyAllRes } from "./redux/messages"
 
 const App = () => {
   let path = window.location.pathname
 
   const [offline, setOffline] = useState(!window.navigator.onLine)
 
+  const [darkMode, setDarkMode] = useState(false)
+
   const { loading, user } = useSelector((state) => state)
 
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
-
-  const [darkMode, setDarkMode] = useState(false)
-
-  const [history, setHistory] = useState([{
-    prompt: '',
-    _id: 'aa',
-    active: true
-  }])
 
   const changeColorMode = (to) => {
     if (to) {
@@ -57,18 +52,7 @@ const App = () => {
 
   })
 
-  // Offline
-  useEffect(() => {
-    window.addEventListener('online', (e) => {
-      location.reload()
-    })
-
-    window.addEventListener('offline', (e) => {
-      setOffline(true)
-    })
-  })
-
-  // Logged Checking
+  // Logged Checking 
   useLayoutEffect(() => {
     dispatch(setLoading(true))
     const getResponse = async () => {
@@ -87,12 +71,18 @@ const App = () => {
         }
       } catch (err) {
         console.log(err)
-        if (!nonAuthUrls.find(elm => window.location.href.includes(elm))) {
+        if (err?.response?.data?.status === 405) {
           dispatch(emptyUser())
-          navigate('/login')
+          dispatch(emptyAllRes())
+          if (!nonAuthUrls.find(elm => window.location.href.includes(elm))) {
+            navigate('/login')
+          }
+        } else if (err?.code !== 'ERR_NETWORK') {
+          navigate('/something-went-wrong')
         }
       } finally {
         if (res?.data?.status === 208) {
+
           nonAuthUrls.splice(3, 1)
           if (nonAuthUrls.find(elm => window.location.href.includes(elm))) {
             navigate('/')
@@ -106,20 +96,32 @@ const App = () => {
     }
   }, [path])
 
+  // Offline
+  useEffect(() => {
+    window.addEventListener('online', (e) => {
+      location.reload()
+    })
+
+    window.addEventListener('offline', (e) => {
+      setOffline(true)
+    })
+  })
+
   return (
     <section className={user ? 'main-grid' : null}>
       {user && (<div>
         <Menu
           changeColorMode={changeColorMode}
           darkMode={darkMode}
-          history={history}
-          setHistory={setHistory}
         />
       </div>)}
 
       {loading && <Loading />}
 
-      {offline && <Offline />}
+      {offline && <Error
+        status={503}
+        content={'Website in offline check your network.'}
+      />}
 
       <Routes>
         <Route exact path="/" element={<Main />} />
@@ -131,7 +133,10 @@ const App = () => {
         <Route path="/signup/pending/:id" element={<Signup />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route path="/forgot/set/:userId/:secret" element={<Forgot />} />
-        <Route path="*" element={<Error />} />
+        <Route path="*" element={<Error
+          status={404}
+          content={'This page could not be found.'}
+        />} />
       </Routes>
     </section>
   )

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { setLoading } from '../redux/loading'
 import './style.scss'
 
-const Error = () => {
+const Error = ({ status, content }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -15,10 +15,10 @@ const Error = () => {
         <div className='Error'>
             <div className="flex">
                 <div className='code'>
-                    404
+                    {status}
                 </div>
                 <div className='txt'>
-                    This page could not be found.
+                    {content}
                 </div>
             </div>
         </div>

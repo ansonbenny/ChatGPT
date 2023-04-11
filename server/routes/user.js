@@ -10,22 +10,29 @@ let router = Router()
 const CheckLogged = async (req, res, next) => {
     jwt.verify(req.cookies?.token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
         if (decoded) {
-            let userData = await user.checkUserFound(decoded).catch((err) => {
-                res.status(500).json({
-                    status: 500,
-                    message: err
-                })
-            })
+            let userData = null
 
-            if (userData) {
-                delete userData.pass
-                res.status(208).json({
-                    status: 208,
-                    message: 'Already Logged',
-                    data: userData
-                })
-            } else {
-                next()
+            try {
+                userData = await user.checkUserFound(decoded)
+            } catch (err) {
+                if (err?.notExists) {
+                    res.clearCookie('token')
+                    next()
+                } else {
+                    res.status(500).json({
+                        status: 500,
+                        message: err
+                    })
+                }
+            } finally {
+                if (userData) {
+                    delete userData.pass
+                    res.status(208).json({
+                        status: 208,
+                        message: 'Already Logged',
+                        data: userData
+                    })
+                }
             }
 
         } else {
@@ -44,6 +51,7 @@ router.get('/checkLogged', CheckLogged, (req, res) => {
 router.post('/signup', CheckLogged, async (req, res) => {
     const Continue = async () => {
         let response = null
+        req.body.pending = true
 
         try {
             response = await user.signup(req.body)
@@ -84,7 +92,7 @@ router.post('/signup', CheckLogged, async (req, res) => {
                     status: 200,
                     message: 'Success',
                     data: {
-                        _id: response.manual && response._id || null,
+                        _id: null,
                         manual: response.manual || false
                     }
                 })
@@ -128,7 +136,6 @@ router.post('/signup', CheckLogged, async (req, res) => {
         }
     } else if (req.body?.email) {
         if (req.body?.pass.length >= 8) {
-            req.body.pending = true
             req.body.email = req.body.email.toLowerCase()
 
             Continue()

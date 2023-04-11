@@ -1,20 +1,26 @@
-import React, { Fragment, useEffect, useRef } from 'react'
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import {
   Avatar, Bar, Light, LogOut, Message,
-  Moon, Plus, Tab, Trash, Xicon
+  Moon, Plus, Tab, Tick, Trash, Xicon
 } from '../../assets/'
 import './style.scss'
 import axios from 'axios'
 import { emptyUser } from '../../redux/user'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { activePage, addHistory } from '../../redux/history'
 
-const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
+const Menu = ({ changeColorMode, darkMode }) => {
+  let path = window.location.pathname
+
   const menuRef = useRef(null)
   const btnRef = useRef(null)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const { history } = useSelector((state) => state)
+  const [confirm, setConfim] = useState(false)
 
   const logOut = async () => {
     if (window.confirm("Do you want log out")) {
@@ -33,16 +39,40 @@ const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
     }
   }
 
+  const clearHistory = async (del) => {
+    if (del) {
+      let res = null
+
+      try {
+        res = axios.delete('/api/chat/all')
+      } catch (err) {
+        alert("Error")
+        console.log(err)
+      } finally {
+        if (res) {
+          navigate('/chat')
+          dispatch(addHistory([]))
+        }
+
+        setConfim(false)
+      }
+    } else {
+      setConfim(true)
+    }
+  }
+
   const showMenuMd = () => {
     menuRef.current.classList.add("showMd")
     document.body.style.overflowY = "hidden"
   }
 
+  //Menu
+
   useEffect(() => {
     window.addEventListener('click', (e) => {
       if (!menuRef?.current?.contains(e.target)
         && !btnRef?.current?.contains(e.target)) {
-        menuRef.current.classList?.remove("showMd")
+        menuRef?.current?.classList?.remove("showMd")
         document.body.style.overflowY = "auto"
       }
     })
@@ -51,7 +81,7 @@ const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
       if (!window.matchMedia("(max-width:767px)").matches) {
         document.body.style.overflowY = "auto"
       } else {
-        if (menuRef.current.classList.contains('showMd')) {
+        if (menuRef?.current?.classList?.contains('showMd')) {
           document.body.style.overflowY = "hidden"
         } else {
           document.body.style.overflowY = "auto"
@@ -59,6 +89,32 @@ const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
       }
     })
   })
+
+  // History Get
+  useEffect(() => {
+    const getHistory = async () => {
+      let res = null
+      try {
+        res = await axios.get('/api/chat/history')
+      } catch (err) {
+        console.log(err)
+      } finally {
+        if (res?.data) {
+          dispatch(addHistory(res?.data?.data))
+        }
+      }
+    }
+
+    getHistory()
+  }, [path])
+
+  // History active
+  useEffect(() => {
+    setConfim(false)
+    let chatId = path.replace('/chat/', '')
+    chatId = chatId.replace('/', '')
+    dispatch(activePage(chatId))
+  }, [path, history])
 
   return (
     <Fragment>
@@ -68,11 +124,19 @@ const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
         </div>
 
         <div className='title'>
-          New chat
+          {
+            path.length > 6 ? history[0]?.prompt : 'New chat'
+          }
         </div>
 
         <div className='end'>
-          <button><Plus /></button>
+          <button onClick={() => {
+            if (path.includes('/chat')) {
+              navigate('/')
+            } else {
+              navigate('/chat')
+            }
+          }}><Plus /></button>
         </div>
       </header>
 
@@ -82,47 +146,62 @@ const Menu = ({ changeColorMode, darkMode, history, setHistory }) => {
             type='button'
             aria-label='new'
             onClick={() => {
-              navigate('/')
+              if (path.includes('/chat')) {
+                navigate('/')
+              } else {
+                navigate('/chat')
+              }
             }}
           >
-            {<Plus />}New Chat
+            {<Plus />}New chat
           </button>
         </div>
 
         <div className="history">
           {
             history?.map((obj, key) => {
-              if (obj.active) {
+              if (obj?.active) {
                 return (
                   <button key={key}
                     className='active'
                     onClick={() => {
-                      navigate('/chat/sample')
+                      navigate(`/chat/${obj?.chatId}`)
                     }}
                   >{<Message />}
-                    Clear conversationsaaaaaaaaaaaaaaaaaa
+                    {obj?.prompt}
                   </button>
                 )
               } else {
                 return (
                   <button key={key}
                     onClick={() => {
-                      navigate('/chat/sample')
+                      navigate(`/chat/${obj?.chatId}`)
                     }}
-                  >{<Message />}Upgrade to Plus <span>New</span></button>)
+                  >{<Message />}{obj?.prompt}</button>)
               }
             })
           }
         </div>
 
         <div className="actions">
-          <button>{<Trash />}Clear conversations</button>
+          {
+            history?.length > 0 && (
+              <>
+                {
+                  confirm ? <button onClick={() => clearHistory(true)}>{<Tick />}Confirm clear conversations</button>
+                    : <button onClick={() => clearHistory(false)}>{<Trash />}Clear conversations</button>
+                }
+              </>
+            )
+          }
           <button>{<Avatar />}Upgrade to Plus <span>New</span></button>
           {
             !darkMode ? <button onClick={() => changeColorMode(true)}><Moon />Dark mode</button>
               : <button onClick={() => changeColorMode(false)}><Light />Light mode</button>
           }
-          <button>{<Tab />}Updates & FAQ</button>
+          <button onClick={() => {
+            window.open('https://help.openai.com/en/collections/3742473-chatgpt', '_blank')
+          }}>{<Tab />}Get help</button>
           <button onClick={logOut} >
             {<LogOut />}Log out
           </button>

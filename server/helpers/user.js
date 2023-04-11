@@ -93,6 +93,9 @@ export default {
     login: ({ email, pass, manual }) => {
         return new Promise(async (resolve, reject) => {
             let user = await db.collection(collections.USER).findOne({ email: email, pending: { $exists: false } })
+                .catch((err) => {
+                    reject(err)
+                })
 
             if (user) {
                 if (manual === 'false') {
@@ -253,13 +256,14 @@ export default {
         return new Promise(async (resolve, reject) => {
             let user = await db.collection(collections.USER).findOne({ _id: new ObjectId(_id), pending: { $exists: false } })
                 .catch((err) => {
+                    console.log(err)
                     reject(err)
                 })
 
             if (user) {
                 resolve(user)
             } else {
-                reject({ text: 'Not found' })
+                reject({ notExists: true, text: 'Not found' })
             }
         })
     }

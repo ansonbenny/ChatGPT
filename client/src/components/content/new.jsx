@@ -1,8 +1,11 @@
 import React, { memo } from 'react'
+import { useDispatch } from 'react-redux'
 import { Sun, Thunder, Warning } from '../../assets'
+import { livePrompt } from '../../redux/messages'
 import './style.scss'
 
-const New = memo(({ setPrompt }) => {
+const New = memo(() => {
+  const dispatch = useDispatch()
   return (
     <div className='New'>
       <div>
@@ -17,19 +20,19 @@ const New = memo(({ setPrompt }) => {
           </div>
 
           <div className='card card-bg hover' onClick={() => {
-            setPrompt("Explain quantum computing in simple terms")
+            dispatch(livePrompt("Explain quantum computing in simple terms"))
           }}>
             <p className='currentColor'>"Explain quantum computing in simple terms" →</p>
           </div>
 
           <div className='card card-bg hover' onClick={() => {
-            setPrompt("Got any creative ideas for a 10 year old’s birthday?")
+            dispatch(livePrompt("Got any creative ideas for a 10 year old’s birthday?"))
           }}>
             <p className='currentColor'>"Got any creative ideas for a 10 year old’s birthday?" →</p>
           </div>
 
           <div className='card card-bg hover' onClick={() => {
-            setPrompt("How do I make an HTTP request in Javascript?")
+            dispatch(livePrompt("How do I make an HTTP request in Javascript?"))
           }}>
             <p className='currentColor'>"How do I make an HTTP request in Javascript?" →</p>
           </div>

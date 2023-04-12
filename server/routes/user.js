@@ -8,7 +8,7 @@ import path from 'path'
 let router = Router()
 
 const CheckLogged = async (req, res, next) => {
-    jwt.verify(req.cookies?.token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+    jwt.verify(req.cookies?.userToken, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
         if (decoded) {
             let userData = null
 
@@ -16,7 +16,7 @@ const CheckLogged = async (req, res, next) => {
                 userData = await user.checkUserFound(decoded)
             } catch (err) {
                 if (err?.notExists) {
-                    res.clearCookie('token')
+                    res.clearCookie('userToken')
                     next()
                 } else {
                     res.status(500).json({
@@ -240,7 +240,7 @@ router.get('/login', CheckLogged, async (req, res) => {
                 })
 
                 res.status(200)
-                    .cookie("token", token, { httpOnly: true, expires: new Date(Date.now() + 86400000) })
+                    .cookie("userToken", token, { httpOnly: true, expires: new Date(Date.now() + 86400000) })
                     .json({
                         status: 200,
                         message: 'Success',
@@ -419,7 +419,7 @@ router.get('/checkUserLogged', CheckLogged, (req, res) => {
 })
 
 router.delete('/account', async (req, res) => {
-    jwt.verify(req.cookies?.token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+    jwt.verify(req.cookies?.userToken, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
         if (decoded) {
             let response = null
             let userData = null
@@ -431,7 +431,7 @@ router.delete('/account', async (req, res) => {
                 }
             } catch (err) {
                 if (err?.notExists) {
-                    res.clearCookie('token')
+                    res.clearCookie('userToken')
                         .status(405).json({
                             status: 405,
                             message: err?.text
@@ -444,7 +444,7 @@ router.delete('/account', async (req, res) => {
                 }
             } finally {
                 if (response) {
-                    res.clearCookie('token').status(200).json({
+                    res.clearCookie('userToken').status(200).json({
                         status: 200,
                         message: 'Success'
                     })
@@ -462,7 +462,7 @@ router.delete('/account', async (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-    res.clearCookie('token').status(200).json({
+    res.clearCookie('userToken').status(200).json({
         status: 200,
         message: 'LogOut'
     })

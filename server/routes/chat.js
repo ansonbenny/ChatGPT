@@ -10,7 +10,7 @@ dotnet.config()
 let router = Router()
 
 const CheckUser = async (req, res, next) => {
-    jwt.verify(req.cookies?.token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+    jwt.verify(req.cookies?.userToken, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
         if (decoded) {
             let userData = null
 
@@ -18,7 +18,7 @@ const CheckUser = async (req, res, next) => {
                 userData = await user.checkUserFound(decoded)
             } catch (err) {
                 if (err?.notExists) {
-                    res.clearCookie('token')
+                    res.clearCookie('userToken')
                         .status(405).json({
                             status: 405,
                             message: err?.text

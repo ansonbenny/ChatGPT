@@ -82,7 +82,6 @@ const App = () => {
         }
       } finally {
         if (res?.data?.status === 208) {
-
           nonAuthUrls.splice(3, 1)
           if (nonAuthUrls.find(elm => window.location.href.includes(elm))) {
             navigate('/')

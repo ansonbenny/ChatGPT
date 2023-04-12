@@ -14,7 +14,7 @@ ChatGPT clone usign mern stack
 
 - Password login
 - Forgot password
-- Google login & sihnup
+- Google login & signup
 - Chat 
 - Auto chat save
 - History Save

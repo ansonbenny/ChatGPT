@@ -45,6 +45,7 @@ To run this project, you will need to add the following environment variables to
 To run this project, you will need to add the following environment variables to your .env.local file in client directory
 
 `VITE_CLIENT_ID` #Google login api client id
+
 `VITE_API_URL`
 
 ## Run Locally

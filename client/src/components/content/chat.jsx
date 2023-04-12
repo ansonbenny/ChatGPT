@@ -9,15 +9,17 @@ import { insertNew } from '../../redux/messages'
 import './style.scss'
 
 const Chat = forwardRef(({ error }, ref) => {
-  const { user, messages } = useSelector((state) => state)
 
   const dispatch = useDispatch()
 
   const contentRef = useRef()
 
+  const { user, messages } = useSelector((state) => state)
+  const { latest, content, all } = messages
+
   const loadResponse = (stateAction,
-    response = messages?.content,
-    chatsId = messages?.latest?.id) => {
+    response = content,
+    chatsId = latest?.id) => {
 
     clearInterval(window.interval)
 
@@ -28,12 +30,12 @@ const Chat = forwardRef(({ error }, ref) => {
     let index = 0
 
     window.interval = setInterval(() => {
-      if (index < response.length) {
+      if (index < response.length && contentRef?.current) {
         if (index === 0) {
           dispatch(insertNew({ chatsId, content: response.charAt(index) }))
           contentRef.current.innerHTML = response.charAt(index)
         } else {
-          dispatch(insertNew({ chatsId, content: response.charAt(index), balance: true }))
+          dispatch(insertNew({ chatsId, content: response.charAt(index), resume: true }))
           contentRef.current.innerHTML += response.charAt(index)
         }
         index++
@@ -45,7 +47,9 @@ const Chat = forwardRef(({ error }, ref) => {
   }
 
   const stopResponse = (stateAction) => {
-    contentRef.current.classList.remove('blink')
+    if (contentRef?.current) {
+      contentRef.current.classList.remove('blink')
+    }
     stateAction({ type: 'resume', status: false })
     clearInterval(window.interval)
   }
@@ -54,16 +58,18 @@ const Chat = forwardRef(({ error }, ref) => {
     stopResponse,
     loadResponse,
     clearResponse: () => {
-      contentRef.current.innerHTML = ''
-      contentRef?.current?.classList.add("blink")
+      if (contentRef?.current) {
+        contentRef.current.innerHTML = ''
+        contentRef?.current?.classList.add("blink")
+      }
     }
   }))
 
   return (
     <div className='Chat'>
       {
-        messages?.all?.filter((obj) => {
-          return !obj.id ? true : obj?.id !== messages?.latest?.id
+        all?.filter((obj) => {
+          return !obj.id ? true : obj?.id !== latest?.id
         })?.map((obj, key) => {
           return (
             <Fragment key={key}>
@@ -92,14 +98,14 @@ const Chat = forwardRef(({ error }, ref) => {
       }
 
       {
-        messages?.latest?.prompt?.length > 0 ? (
+        latest?.prompt?.length > 0 && (
           <Fragment>
             <div className='qs'>
               <div className='acc'>
                 {user?.fName?.charAt(0)}
               </div>
               <div className='txt'>
-                {messages?.latest?.prompt}
+                {latest?.prompt}
               </div>
             </div>
 
@@ -117,7 +123,7 @@ const Chat = forwardRef(({ error }, ref) => {
               </div>
             </div>
           </Fragment>
-        ) : <span ref={contentRef} />
+        )
       }
     </div>
   )

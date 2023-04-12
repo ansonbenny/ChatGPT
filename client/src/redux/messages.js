@@ -13,7 +13,7 @@ let messagesSlice = createSlice({
         all: []
     },
     reducers: {
-        emptyAllRes: (state, action) => {
+        emptyAllRes: () => {
             return {
                 prompt: '',
                 content: '',
@@ -33,14 +33,18 @@ let messagesSlice = createSlice({
         },
         insertNew: (state, { payload }) => {
             const { chatsId, content = null,
-                balance = false, full = null, _id = null } = payload
+                resume = false, fullContent = null,
+                _id = null, prompt = null } = payload
 
             if (_id) {
                 state._id = _id
             }
 
             state.latest.id = chatsId
-            state.latest.prompt = state.prompt
+
+            if (prompt) {
+                state.latest.prompt = prompt
+            }
 
             const addToList = (latest) => {
                 if (state['all'].find(obj => obj.id === latest.id)) {
@@ -54,7 +58,7 @@ let messagesSlice = createSlice({
                 }
             }
 
-            if (content && balance) {
+            if (content && resume) {
                 state.latest.content += content
                 addToList(state.latest)
 
@@ -63,8 +67,8 @@ let messagesSlice = createSlice({
                 addToList(state.latest)
             }
 
-            if (full) {
-                state.content = full
+            if (fullContent) {
+                state.content = fullContent
             }
 
             return state

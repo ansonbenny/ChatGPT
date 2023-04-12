@@ -418,6 +418,49 @@ router.get('/checkUserLogged', CheckLogged, (req, res) => {
     })
 })
 
+router.delete('/account', async (req, res) => {
+    jwt.verify(req.cookies?.token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+        if (decoded) {
+            let response = null
+            let userData = null
+
+            try {
+                userData = await user.checkUserFound(decoded)
+                if (userData) {
+                    response = await user.deleteUser(userData._id)
+                }
+            } catch (err) {
+                if (err?.notExists) {
+                    res.clearCookie('token')
+                        .status(405).json({
+                            status: 405,
+                            message: err?.text
+                        })
+                } else {
+                    res.status(500).json({
+                        status: 500,
+                        message: err
+                    })
+                }
+            } finally {
+                if (response) {
+                    res.clearCookie('token').status(200).json({
+                        status: 200,
+                        message: 'Success'
+                    })
+                }
+            }
+
+        } else {
+            res.status(405).json({
+                status: 405,
+                message: 'Not Logged'
+            })
+        }
+    })
+
+})
+
 router.get('/logout', (req, res) => {
     res.clearCookie('token').status(200).json({
         status: 200,

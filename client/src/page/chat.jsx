@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useReducer, useRef } from 'react'
+import React, { useEffect, useReducer, useRef } from 'react'
 import { Reload, Rocket, Stop } from '../assets'
 import { Chat, New } from '../components'
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +12,12 @@ import './style.scss'
 const reducer = (state, { type, status }) => {
     switch (type) {
         case 'chat':
-            return { chat: status, loading: status, resume: status, actionBtns: false }
+            return {
+                chat: status,
+                loading: status,
+                resume: status,
+                actionBtns: false
+            }
         case 'error':
             return {
                 chat: true,
@@ -22,15 +27,25 @@ const reducer = (state, { type, status }) => {
                 actionBtns: state.actionBtns
             }
         case 'resume':
-            return { chat: true, resume: status, loading: status, actionBtns: true }
+            return {
+                chat: true,
+                resume: status,
+                loading: status,
+                actionBtns: true
+            }
         default: return state
     }
 }
 
 const Main = () => {
-    const navigate = useNavigate()
 
     let path = window.location.pathname
+
+    const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+
+    const chatRef = useRef()
 
     const { id = null } = useParams()
 
@@ -41,10 +56,6 @@ const Main = () => {
         error: false,
         actionBtns: false
     })
-
-    const dispatch = useDispatch()
-
-    const chatRef = useRef()
 
     useEffect(() => {
         if (user) {
@@ -99,7 +110,6 @@ const Main = () => {
             <InputArea
                 status={status}
                 chatRef={chatRef}
-                id={id}
                 stateAction={stateAction}
             />
 
@@ -110,7 +120,7 @@ const Main = () => {
 export default Main
 
 //Input Area
-const InputArea = ({ status, chatRef, id, stateAction }) => {
+const InputArea = ({ status, chatRef, stateAction }) => {
 
     let textAreaRef = useRef()
 
@@ -118,7 +128,7 @@ const InputArea = ({ status, chatRef, id, stateAction }) => {
 
     const dispatch = useDispatch()
 
-    const { messages } = useSelector((state) => state)
+    const { prompt, content, _id } = useSelector((state) => state.messages)
 
     useEffect(() => {
         textAreaRef.current?.addEventListener('input', (e) => {
@@ -128,26 +138,27 @@ const InputArea = ({ status, chatRef, id, stateAction }) => {
     })
 
     const FormHandle = async () => {
-        if (messages?.prompt?.length > 0) {
+
+        if (prompt?.length > 0) {
 
             stateAction({ type: 'chat', status: true })
 
             let chatsId = Date.now()
 
-            dispatch(insertNew({ id: chatsId, content: '' }))
+            dispatch(insertNew({ id: chatsId, content: '', prompt }))
             chatRef?.current?.clearResponse()
 
             let res = null
 
             try {
-                if (messages?._id) {
+                if (_id) {
                     res = await axios.put('/api/chat', {
-                        chatId: messages._id,
-                        prompt: messages.prompt
+                        chatId: _id,
+                        prompt
                     })
                 } else {
                     res = await axios.post('/api/chat', {
-                        prompt: messages.prompt
+                        prompt
                     })
                 }
             } catch (err) {
@@ -162,8 +173,11 @@ const InputArea = ({ status, chatRef, id, stateAction }) => {
             } finally {
                 if (res?.data) {
                     const { _id, content } = res?.data?.data
-                    dispatch(insertNew({ _id, full: content, chatsId }))
+
+                    dispatch(insertNew({ _id, fullContent: content, chatsId }))
+
                     chatRef?.current?.loadResponse(stateAction, content, chatsId)
+
                     stateAction({ type: 'error', status: false })
                 }
             }
@@ -179,7 +193,7 @@ const InputArea = ({ status, chatRef, id, stateAction }) => {
                     <>
                         <div className="chatActionsLg">
                             {
-                                status.chat && messages?.content?.length > 0 && status.actionBtns && (
+                                status.chat && content?.length > 0 && status.actionBtns && (
                                     <>
                                         {
                                             !status?.resume ? <button
@@ -198,8 +212,10 @@ const InputArea = ({ status, chatRef, id, stateAction }) => {
 
                         <div className="flexBody">
                             <div className="box">
-                                <textarea placeholder='Send a message...' ref={textAreaRef} value={messages?.prompt}
-                                    onChange={(e) => dispatch(livePrompt(e.target.value))}
+                                <textarea placeholder='Send a message...' ref={textAreaRef} value={prompt}
+                                    onChange={(e) => {
+                                        dispatch(livePrompt(e.target.value))
+                                    }}
                                 />
                                 {
                                     !status?.loading ? <button onClick={FormHandle}>{<Rocket />}</button>
@@ -214,7 +230,7 @@ const InputArea = ({ status, chatRef, id, stateAction }) => {
                             </div>
 
                             {
-                                status.chat && messages?.content?.length > 0 && status.actionBtns && (
+                                status.chat && content?.length > 0 && status.actionBtns && (
                                     <>
                                         {
                                             !status?.resume ? <div className="chatActionsMd">

@@ -266,5 +266,20 @@ export default {
                 reject({ notExists: true, text: 'Not found' })
             }
         })
+    },
+    deleteUser: (userId) => {
+        return new Promise((resolve, reject) => {
+            db.collection(collections.USER).deleteOne({
+                _id: userId
+            }).then((res) => {
+                if (res?.deletedCount > 0) {
+                    resolve(res)
+                } else {
+                    reject({ text: "DB Getting Something Error" })
+                }
+            }).catch((err) => {
+                reject(err)
+            })
+        })
     }
 }

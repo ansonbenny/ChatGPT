@@ -112,7 +112,6 @@ const App = () => {
       {user && (<div>
         <Menu
           changeColorMode={changeColorMode}
-          darkMode={darkMode}
         />
       </div>)}
 

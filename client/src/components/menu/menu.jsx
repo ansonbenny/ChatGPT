@@ -1,20 +1,20 @@
-import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import {
-  Avatar, Bar, Light, LogOut, Message,
-  Moon, Plus, Tab, Tick, Trash, Xicon
+  Avatar, Bar, LogOut, Message, Plus, Settings, Tab, Tick, Trash, Xicon
 } from '../../assets/'
-import './style.scss'
 import axios from 'axios'
 import { emptyUser } from '../../redux/user'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { activePage, addHistory } from '../../redux/history'
+import './style.scss'
 
-const Menu = ({ changeColorMode, darkMode }) => {
+const Menu = ({ changeColorMode }) => {
   let path = window.location.pathname
 
   const menuRef = useRef(null)
   const btnRef = useRef(null)
+  const settingRef = useRef(null)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -118,6 +118,11 @@ const Menu = ({ changeColorMode, darkMode }) => {
 
   return (
     <Fragment>
+      <Modal
+        changeColorMode={changeColorMode}
+        settingRef={settingRef}
+      />
+
       <header >
         <div className='start'>
           <button onClick={showMenuMd} ref={btnRef}><Bar /></button>
@@ -153,7 +158,7 @@ const Menu = ({ changeColorMode, darkMode }) => {
               }
             }}
           >
-            {<Plus />}New chat
+            <Plus />New chat
           </button>
         </div>
 
@@ -167,7 +172,7 @@ const Menu = ({ changeColorMode, darkMode }) => {
                     onClick={() => {
                       navigate(`/chat/${obj?.chatId}`)
                     }}
-                  >{<Message />}
+                  ><Message />
                     {obj?.prompt}
                   </button>
                 )
@@ -177,7 +182,7 @@ const Menu = ({ changeColorMode, darkMode }) => {
                     onClick={() => {
                       navigate(`/chat/${obj?.chatId}`)
                     }}
-                  >{<Message />}{obj?.prompt}</button>)
+                  ><Message />{obj?.prompt}</button>)
               }
             })
           }
@@ -188,22 +193,24 @@ const Menu = ({ changeColorMode, darkMode }) => {
             history?.length > 0 && (
               <>
                 {
-                  confirm ? <button onClick={() => clearHistory(true)}>{<Tick />}Confirm clear conversations</button>
-                    : <button onClick={() => clearHistory(false)}>{<Trash />}Clear conversations</button>
+                  confirm ? <button onClick={() => clearHistory(true)}><Tick />Confirm clear conversations</button>
+                    : <button onClick={() => clearHistory(false)}><Trash />Clear conversations</button>
                 }
               </>
             )
           }
-          <button>{<Avatar />}Upgrade to Plus <span>New</span></button>
-          {
-            !darkMode ? <button onClick={() => changeColorMode(true)}><Moon />Dark mode</button>
-              : <button onClick={() => changeColorMode(false)}><Light />Light mode</button>
-          }
+          <button><Avatar />Upgrade to Plus <span>New</span></button>
+          <button onClick={() => {
+            if (settingRef?.current) {
+              settingRef.current.classList.add("clicked")
+              settingRef.current.style.display = 'flex'
+            }
+          }} ><Settings />Settings</button>
           <button onClick={() => {
             window.open('https://help.openai.com/en/collections/3742473-chatgpt', '_blank')
-          }}>{<Tab />}Get help</button>
+          }}><Tab />Get help</button>
           <button onClick={logOut} >
-            {<LogOut />}Log out
+            <LogOut />Log out
           </button>
         </div>
       </div >
@@ -216,3 +223,69 @@ const Menu = ({ changeColorMode, darkMode }) => {
 }
 
 export default Menu
+
+const Modal = ({ changeColorMode, settingRef }) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const deleteAccount = async () => {
+    if (window.confirm("Do you want delete your account")) {
+
+      let res = null
+      try {
+        res = await axios.delete('/api/user/account')
+      } catch (err) {
+        console.log(err)
+        if (err?.response?.data?.status === 405) {
+          alert("Not Logged")
+          dispatch(emptyUser())
+          navigate('/login')
+        } else {
+          alert(err)
+        }
+      } finally {
+        alert("Success")
+        dispatch(emptyUser())
+        navigate('/login')
+      }
+    }
+  }
+
+  return (
+    <div className="settingsModal" ref={settingRef} onClick={(e) => {
+      let inner = settingRef.current.childNodes
+      if (!inner?.[0]?.contains(e.target)) {
+        settingRef.current.style.display = 'none'
+      }
+    }}>
+      <div className="inner">
+        <div className='content top'>
+          <h3>Settings</h3>
+          <button onClick={() => {
+            settingRef.current.style.display = 'none'
+          }}><Xicon /></button>
+        </div>
+        <div className='content ceneter'>
+          <p>Dark mode</p>
+          <button
+            onClick={() => {
+              let mode = localStorage.getItem('darkMode')
+              if (mode) {
+                changeColorMode(false)
+              } else {
+                changeColorMode(true)
+              }
+            }
+            }
+            role='switch' type='button'>
+            <div></div>
+          </button>
+        </div>
+        <div className="bottum">
+          <button>Export data</button>
+          <button className='end' onClick={deleteAccount}>Delete account</button>
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -62,12 +62,31 @@ router.post('/', CheckUser, async (req, res) => {
     let response = {}
 
     try {
-        response.openai = await openai.createChatCompletion({
-            model: "gpt-3.5-turbo",
-            messages: [{ "role": "user", "content": prompt }]
-        })
+        response.openai = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: prompt,
+            temperature: 0,
+            max_tokens: 100,
+            top_p: 1,
+            frequency_penalty: 0.2,
+            presence_penalty: 0,
+        });
 
-        response.db = await chat.newResponse(prompt, response, userId)
+        if (response?.openai?.data?.choices?.[0]?.text) {
+            response.openai = response.openai.data.choices[0].text
+            let index = 0
+            for (let c of response['openai']) {
+                if (index <= 1) {
+                    if (c == '\n') {
+                        response.openai = response.openai.slice(1, response.openai.length)
+                    }
+                } else {
+                    break;
+                }
+                index++
+            }
+            response.db = await chat.newResponse(prompt, response, userId)
+        }
     } catch (err) {
         res.status(500).json({
             status: 500,
@@ -80,7 +99,7 @@ router.post('/', CheckUser, async (req, res) => {
                 message: 'Success',
                 data: {
                     _id: response.db['chatId'],
-                    content: response.openai?.['data']?.choices[0].message.content
+                    content: response.openai
                 }
             })
         }
@@ -93,12 +112,31 @@ router.put('/', CheckUser, async (req, res) => {
     let response = {}
 
     try {
-        response.openai = await openai.createChatCompletion({
-            model: "gpt-3.5-turbo",
-            messages: [{ "role": "user", "content": prompt }]
-        })
+        response.openai = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: prompt,
+            temperature: 0.7,
+            max_tokens: 100,
+            top_p: 1,
+            frequency_penalty: 0.2,
+            presence_penalty: 0,
+        });
 
-        response.db = await chat.updateChat(chatId, prompt, response, userId)
+        if (response?.openai?.data?.choices?.[0]?.text) {
+            response.openai = response.openai.data.choices[0].text
+            let index = 0
+            for (let c of response['openai']) {
+                if (index <= 1) {
+                    if (c == '\n') {
+                        response.openai = response.openai.slice(1, response.openai.length)
+                    }
+                } else {
+                    break;
+                }
+                index++
+            }
+            response.db = await chat.updateChat(chatId, prompt, response, userId)
+        }
     } catch (err) {
         res.status(500).json({
             status: 500,
@@ -110,7 +148,7 @@ router.put('/', CheckUser, async (req, res) => {
                 status: 200,
                 message: 'Success',
                 data: {
-                    content: response.openai?.['data']?.choices[0].message.content
+                    content: response.openai
                 }
             })
         }

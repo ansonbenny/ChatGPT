@@ -3,7 +3,7 @@ import collections from "../db/collections.js";
 import { ObjectId } from "mongodb";
 
 export default {
-    newResponse: (prompt, response, userId) => {
+    newResponse: (prompt, { openai }, userId) => {
         return new Promise(async (resolve, reject) => {
             let chatId = new ObjectId().toHexString()
             let res = null
@@ -15,7 +15,7 @@ export default {
                         chatId,
                         chats: [{
                             prompt,
-                            content: response.openai?.['data']?.choices[0].message.content
+                            content: openai
                         }]
                     }]
                 })
@@ -29,7 +29,7 @@ export default {
                                 chatId,
                                 chats: [{
                                     prompt,
-                                    content: response.openai?.['data']?.choices[0].message.content
+                                    content: openai
                                 }]
                             }
                         }
@@ -49,7 +49,7 @@ export default {
             }
         })
     },
-    updateChat: (chatId, prompt, response, userId) => {
+    updateChat: (chatId, prompt, { openai }, userId) => {
         return new Promise(async (resolve, reject) => {
             let res = await db.collection(collections.CHAT).updateOne({
                 user: userId.toString(),
@@ -58,7 +58,7 @@ export default {
                 $push: {
                     'data.$.chats': {
                         prompt,
-                        content: response.openai?.['data']?.choices[0].message.content
+                        content: openai
                     }
                 }
             }).catch((err) => {

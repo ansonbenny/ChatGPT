@@ -41,7 +41,7 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
     }
 
     const formHandleMail = async (e) => {
-        e.preventDefault()
+        if (e) { e.preventDefault() }
         let res = null
         try {
             res = await axios.post('/api/user/forgot-request', {
@@ -149,7 +149,7 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
                                             <p>Please check the email address {formData?.email} for instructions to reset your password.</p>
                                         </div>
 
-                                        <button>Resend Mail</button>
+                                        <button onClick={() => formHandleMail(null)}>Resend Mail</button>
                                     </div >
                                 )
                         }

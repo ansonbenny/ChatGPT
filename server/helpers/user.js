@@ -273,6 +273,12 @@ export default {
                 _id: userId
             }).then((res) => {
                 if (res?.deletedCount > 0) {
+                    db.collection(collections.CHAT).deleteOne({
+                        user: userId.toString()
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+
                     resolve(res)
                 } else {
                     reject({ text: "DB Getting Something Error" })

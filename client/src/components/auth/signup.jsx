@@ -42,7 +42,7 @@ const SignupComponent = () => {
   }
 
   const formHandle = async (e) => {
-    e.preventDefault()
+    e?.preventDefault()
     if (formData?.pass.length >= 8) {
       let res = null
       try {
@@ -230,7 +230,7 @@ const SignupComponent = () => {
               <p>Please check the email address {formData.email} for instructions to reset your password.</p>
             </div>
 
-            <button onClick={formHandle}>Resend Mail</button>
+            <button onClick={() => formHandle(null)}>Resend Mail</button>
           </div >
         )
       }

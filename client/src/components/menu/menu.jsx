@@ -6,8 +6,8 @@ import { emptyUser } from '../../redux/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { activePage, addHistory } from '../../redux/history'
-import './style.scss'
 import instance from '../../config/instance'
+import './style.scss'
 
 const Menu = ({ changeColorMode }) => {
   let path = window.location.pathname

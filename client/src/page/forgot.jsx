@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ForgotComponent } from '../components'
 import instance from '../config/instance'
 import { setLoading } from '../redux/loading'
+import './style.scss'
 
 const Forgot = () => {
     const { userId = null, secret = null } = useParams()

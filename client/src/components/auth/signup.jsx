@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google'
 import FormFeild from './FormFeild'
 import axios from 'axios'
-import './style.scss'
 import instance from '../../config/instance'
+import './style.scss'
 
 const reducer = (state, { type, status }) => {
   switch (type) {

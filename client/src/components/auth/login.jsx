@@ -2,11 +2,11 @@ import React, { useReducer, useState } from 'react'
 import { GptIcon, Google, Microsoft } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
 import FormFeild from './FormFeild'
-import './style.scss'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useDispatch } from 'react-redux'
 import { insertUser } from '../../redux/user'
 import instance from '../../config/instance'
+import './style.scss'
 
 const reducer = (state, { type, status }) => {
     switch (type) {

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { GptIcon } from '../assets'
 import { LoginComponent } from '../components'
 import { setLoading } from '../redux/loading'
+import './style.scss'
 
 const Login = () => {
   const [auth, setAuth] = useState(false)

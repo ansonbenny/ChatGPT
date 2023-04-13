@@ -6,8 +6,8 @@ import { setLoading } from '../redux/loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { addList, emptyAllRes, insertNew, livePrompt } from '../redux/messages';
 import { emptyUser } from '../redux/user';
-import './style.scss'
 import instance from '../config/instance';
+import './style.scss'
 
 const reducer = (state, { type, status }) => {
     switch (type) {

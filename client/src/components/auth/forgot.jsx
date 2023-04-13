@@ -2,8 +2,8 @@ import React, { Fragment, useCallback, useReducer, useState } from 'react'
 import { GptIcon, Tick, Mail } from '../../assets'
 import { useNavigate } from 'react-router-dom'
 import FormFeild from './FormFeild'
-import './style.scss'
 import instance from '../../config/instance'
+import './style.scss'
 
 const reducer = (state, { type, status }) => {
     switch (type) {

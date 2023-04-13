@@ -1,12 +1,12 @@
 import React, { useReducer, useState } from 'react'
 import { GptIcon, Google, Microsoft } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import FormFeild from './FormFeild'
 import './style.scss'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useDispatch } from 'react-redux'
 import { insertUser } from '../../redux/user'
+import instance from '../../config/instance'
 
 const reducer = (state, { type, status }) => {
     switch (type) {
@@ -54,8 +54,7 @@ const LoginComponent = () => {
         e?.preventDefault()
         let res = null
         try {
-            res = await axios.get('/api/user/login', {
-                withCredentials: true,
+            res = await instance.get('/api/user/login', {
                 params: googleData || formData
             })
         } catch (err) {

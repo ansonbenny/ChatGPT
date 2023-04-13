@@ -1,8 +1,8 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ForgotComponent } from '../components'
+import instance from '../config/instance'
 import { setLoading } from '../redux/loading'
 
 const Forgot = () => {
@@ -26,7 +26,7 @@ const Forgot = () => {
                     let res = null
 
                     try {
-                        res = await axios.get('/api/user/forgot-check', {
+                        res = await instance.get('/api/user/forgot-check', {
                             params: {
                                 userId,
                                 secret

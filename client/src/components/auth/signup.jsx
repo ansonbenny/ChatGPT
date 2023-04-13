@@ -5,6 +5,7 @@ import { useGoogleLogin } from '@react-oauth/google'
 import FormFeild from './FormFeild'
 import axios from 'axios'
 import './style.scss'
+import instance from '../../config/instance'
 
 const reducer = (state, { type, status }) => {
   switch (type) {
@@ -45,7 +46,7 @@ const SignupComponent = () => {
     if (formData?.pass.length >= 8) {
       let res = null
       try {
-        res = await axios.post('/api/user/signup', formData)
+        res = await instance.post('/api/user/signup', formData)
       } catch (err) {
         console.log(err)
         if (err?.response?.data.message?.exists) {

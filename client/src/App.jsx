@@ -4,10 +4,10 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { Error, Forgot, Login, Main, Signup } from "./page"
 import Loading from "./components/loading/loading"
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
 import { setLoading } from "./redux/loading"
 import { emptyUser, insertUser } from "./redux/user"
 import { emptyAllRes } from "./redux/messages"
+import instance from "./config/instance"
 
 const App = () => {
   let path = window.location.pathname
@@ -65,7 +65,7 @@ const App = () => {
       let res = null
 
       try {
-        res = await axios.get('/api/user/checkLogged')
+        res = await instance.get('/api/user/checkLogged')
         if (res?.data?.data) {
           dispatch(insertUser(res?.data?.data))
         }

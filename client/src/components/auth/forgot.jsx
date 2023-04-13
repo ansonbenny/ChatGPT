@@ -1,9 +1,9 @@
 import React, { Fragment, useCallback, useReducer, useState } from 'react'
 import { GptIcon, Tick, Mail } from '../../assets'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import FormFeild from './FormFeild'
 import './style.scss'
+import instance from '../../config/instance'
 
 const reducer = (state, { type, status }) => {
     switch (type) {
@@ -44,7 +44,7 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
         if (e) { e.preventDefault() }
         let res = null
         try {
-            res = await axios.post('/api/user/forgot-request', {
+            res = await instance.post('/api/user/forgot-request', {
                 email: formData.email
             })
         } catch (err) {
@@ -69,7 +69,7 @@ const ForgotComponent = ({ isRequest, userId, secret }) => {
 
                 let res = null
                 try {
-                    res = await axios.put('/api/user/forgot-finish', {
+                    res = await instance.put('/api/user/forgot-finish', {
                         userId,
                         secret,
                         newPass: formData.newPass,

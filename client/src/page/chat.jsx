@@ -2,12 +2,12 @@ import React, { useEffect, useReducer, useRef } from 'react'
 import { Reload, Rocket, Stop } from '../assets'
 import { Chat, New } from '../components'
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios'
 import { setLoading } from '../redux/loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { addList, emptyAllRes, insertNew, livePrompt } from '../redux/messages';
 import { emptyUser } from '../redux/user';
 import './style.scss'
+import instance from '../config/instance';
 
 const reducer = (state, { type, status }) => {
     switch (type) {
@@ -65,7 +65,7 @@ const Main = () => {
                     const getSaved = async () => {
                         let res = null
                         try {
-                            res = await axios.get('/api/chat/saved', {
+                            res = await instance.get('/api/chat/saved', {
                                 params: {
                                     chatId: id
                                 }
@@ -152,12 +152,12 @@ const InputArea = ({ status, chatRef, stateAction }) => {
 
             try {
                 if (_id) {
-                    res = await axios.put('/api/chat', {
+                    res = await instance.put('/api/chat', {
                         chatId: _id,
                         prompt
                     })
                 } else {
-                    res = await axios.post('/api/chat', {
+                    res = await instance.post('/api/chat', {
                         prompt
                     })
                 }

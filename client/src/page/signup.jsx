@@ -1,8 +1,8 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RegisterPendings, SignupComponent } from '../components'
+import instance from '../config/instance'
 import { setLoading } from '../redux/loading'
 import './style.scss'
 
@@ -26,7 +26,7 @@ const Signup = () => {
         const checkPending = async () => {
           let res = null
           try {
-            res = await axios.get('/api/user/checkPending', {
+            res = await instance.get('/api/user/checkPending', {
               params: {
                 _id: id
               }

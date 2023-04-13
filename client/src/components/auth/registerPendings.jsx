@@ -1,7 +1,7 @@
-import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GptIcon } from '../../assets'
+import instance from '../../config/instance'
 import './style.scss'
 
 const RegisterPendings = ({ _id }) => {
@@ -17,7 +17,7 @@ const RegisterPendings = ({ _id }) => {
     if (formData?.fName && formData?.lName) {
       let res = null
       try {
-        res = await axios.put('/api/user/signup-finish', {
+        res = await instance.put('/api/user/signup-finish', {
           fName: formData.fName,
           lName: formData.lName,
           _id

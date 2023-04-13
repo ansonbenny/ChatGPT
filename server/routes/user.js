@@ -8,7 +8,9 @@ import path from 'path'
 let router = Router()
 
 const CheckLogged = async (req, res, next) => {
-    jwt.verify(req.cookies?.userToken, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
+    const token = req.cookies.userToken
+
+    jwt.verify(token, process.env.JWT_PRIVATE_KEY, async (err, decoded) => {
         if (decoded) {
             let userData = null
 

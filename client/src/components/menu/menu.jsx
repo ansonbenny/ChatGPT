@@ -2,12 +2,12 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import {
   Avatar, Bar, LogOut, Message, Plus, Settings, Tab, Tick, Trash, Xicon
 } from '../../assets/'
-import axios from 'axios'
 import { emptyUser } from '../../redux/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { activePage, addHistory } from '../../redux/history'
 import './style.scss'
+import instance from '../../config/instance'
 
 const Menu = ({ changeColorMode }) => {
   let path = window.location.pathname
@@ -26,7 +26,7 @@ const Menu = ({ changeColorMode }) => {
     if (window.confirm("Do you want log out")) {
       let res = null
       try {
-        res = await axios.get('/api/user/logout')
+        res = await instance.get('/api/user/logout')
       } catch (err) {
         alert(err)
       } finally {
@@ -44,7 +44,7 @@ const Menu = ({ changeColorMode }) => {
       let res = null
 
       try {
-        res = axios.delete('/api/chat/all')
+        res = instance.delete('/api/chat/all')
       } catch (err) {
         alert("Error")
         console.log(err)
@@ -95,7 +95,7 @@ const Menu = ({ changeColorMode }) => {
     const getHistory = async () => {
       let res = null
       try {
-        res = await axios.get('/api/chat/history')
+        res = await instance.get('/api/chat/history')
       } catch (err) {
         console.log(err)
       } finally {
@@ -233,7 +233,7 @@ const Modal = ({ changeColorMode, settingRef }) => {
 
       let res = null
       try {
-        res = await axios.delete('/api/user/account')
+        res = await instance.delete('/api/user/account')
       } catch (err) {
         console.log(err)
         if (err?.response?.data?.status === 405) {

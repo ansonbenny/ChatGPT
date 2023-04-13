@@ -12,6 +12,8 @@ ChatGPT clone usign mern stack
 
 ## Features
 
+- PWA
+- Offline
 - Password login
 - Forgot password
 - Google login & signup

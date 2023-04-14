@@ -227,7 +227,7 @@ const SignupComponent = () => {
             </div>
 
             <div>
-              <p>Please check the email address {formData.email} for instructions to reset your password.</p>
+              <p>Please check the email address {formData.email} for instructions to signup.</p>
             </div>
 
             <button onClick={() => formHandle(null)}>Resend Mail</button>

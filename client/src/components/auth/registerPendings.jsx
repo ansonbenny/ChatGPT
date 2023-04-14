@@ -24,7 +24,12 @@ const RegisterPendings = ({ _id }) => {
         })
       } catch (err) {
         console.log(err)
-        alert(err)
+        if (err?.response?.data?.status === 422) {
+          alert("Already Registered")
+          navigate('/login')
+        } else {
+          alert(err)
+        }
       } finally {
         if (res?.data?.status === 208) {
           navigate('/')

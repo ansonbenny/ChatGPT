@@ -200,10 +200,17 @@ router.put('/signup-finish', CheckLogged, async (req, res) => {
     try {
         response = await user.finishSignup(req.body)
     } catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err
-        })
+        if (err?.status === 422) {
+            res.status(422).json({
+                status: 422,
+                message: 'Already Registered'
+            })
+        } else {
+            res.status(500).json({
+                status: 500,
+                message: err
+            })
+        }
     } finally {
         if (response) {
             res.status(200).json({

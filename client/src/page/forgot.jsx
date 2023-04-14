@@ -8,7 +8,7 @@ import './style.scss'
 
 const Forgot = () => {
     const { userId = null, secret = null } = useParams()
-    const { user } = useSelector((state) => state)
+    const { user, loading } = useSelector((state) => state)
 
     const path = window.location.pathname
     const dispatch = useDispatch()
@@ -16,11 +16,11 @@ const Forgot = () => {
     const [isRequest, setIsRequest] = useState(true)
 
     useEffect(() => {
-        if (!user) {
+        if (!user && !loading?.api) {
             if (path === '/forgot/' || path === '/forgot') {
                 setIsRequest(true)
                 setTimeout(() => {
-                    dispatch(setLoading(false))
+                    dispatch(setLoading({ site: false }))
                 }, 1000)
             } else {
                 const getResponse = async () => {
@@ -47,7 +47,7 @@ const Forgot = () => {
                         } else if (res) {
                             setIsRequest(false)
                             setTimeout(() => {
-                                dispatch(setLoading(false))
+                                dispatch(setLoading({ site: false }))
                             }, 1000)
                         }
                     }
@@ -56,7 +56,7 @@ const Forgot = () => {
                 getResponse()
             }
         }
-    }, [path, user])
+    }, [path, user, loading])
 
     return (
         <div className='Auth'>

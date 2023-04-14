@@ -8,7 +8,7 @@ import './style.scss'
 
 const Login = () => {
   const [auth, setAuth] = useState(false)
-  const { user } = useSelector((state) => state)
+  const { user, loading } = useSelector((state) => state)
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -16,20 +16,20 @@ const Login = () => {
   const path = window.location.pathname
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !loading?.api) {
       if (path === '/login/auth') {
         setAuth(true)
         setTimeout(() => {
-          dispatch(setLoading(false))
+          dispatch(setLoading({ site: false }))
         }, 1000)
       } else {
         setAuth(false)
         setTimeout(() => {
-          dispatch(setLoading(false))
+          dispatch(setLoading({ site: false }))
         }, 1000)
       }
     }
-  }, [path, user])
+  }, [path, user, loading])
 
   return (
     <div className='Auth'>

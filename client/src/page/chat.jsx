@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef } from 'react'
 import { Reload, Rocket, Stop } from '../assets'
 import { Chat, New } from '../components'
 import { useNavigate, useParams } from 'react-router-dom';
-import { setLoading } from '../redux/loading';
+import loading, { setLoading } from '../redux/loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { addList, emptyAllRes, insertNew, livePrompt } from '../redux/messages';
 import { emptyUser } from '../redux/user';
@@ -49,7 +49,7 @@ const Main = () => {
 
     const { id = null } = useParams()
 
-    const { user } = useSelector((state) => state)
+    const { user, loading } = useSelector((state) => state)
 
     const [status, stateAction] = useReducer(reducer, {
         chat: false,
@@ -58,7 +58,7 @@ const Main = () => {
     })
 
     useEffect(() => {
-        if (user) {
+        if (user && !loading?.api) {
             dispatch(emptyAllRes())
             setTimeout(() => {
                 if (id) {
@@ -89,10 +89,10 @@ const Main = () => {
                 } else {
                     stateAction({ type: 'chat', status: false })
                 }
-                dispatch(setLoading(false))
+                dispatch(setLoading({ site: false }))
             }, 1000)
         }
-    }, [user, path])
+    }, [user, path, loading])
 
     return (
         <div className="main">

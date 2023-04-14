@@ -14,8 +14,6 @@ const App = () => {
 
   const [offline, setOffline] = useState(!window.navigator.onLine)
 
-  const [darkMode, setDarkMode] = useState(false)
-
   const { loading, user } = useSelector((state) => state)
 
   const dispatch = useDispatch()
@@ -34,8 +32,6 @@ const App = () => {
 
       document.body.className = "light"
     }
-
-    setDarkMode(to)
   }
 
   // Dark & Light Mode
@@ -43,10 +39,8 @@ const App = () => {
     let mode = localStorage.getItem('darkMode')
 
     if (mode) {
-      setDarkMode(true)
       changeColorMode(true)
     } else {
-      setDarkMode(false)
       changeColorMode(false)
     }
 
@@ -54,13 +48,8 @@ const App = () => {
 
   // Logged Checking 
   useLayoutEffect(() => {
-    dispatch(setLoading(true))
+    dispatch(setLoading({ api: true, site: true }))
     const getResponse = async () => {
-
-      let nonAuthUrls = [`${window.location.origin}/login`,
-      `${window.location.origin}/forgot`,
-      `${window.location.origin}/signup`,
-      `${window.location.origin}/404`]
 
       let res = null
 
@@ -71,19 +60,26 @@ const App = () => {
         }
       } catch (err) {
         console.log(err)
+        dispatch(setLoading({ api: false }))
+
         if (err?.response?.data?.status === 405) {
           dispatch(emptyUser())
           dispatch(emptyAllRes())
-          if (!nonAuthUrls.find(elm => window.location.href.includes(elm))) {
+
+          if (path === '/' || window.location.href.includes(`${window.location.origin}/chat`)) {
             navigate('/login')
           }
+
         } else if (err?.code !== 'ERR_NETWORK') {
           navigate('/something-went-wrong')
         }
       } finally {
         if (res?.data?.status === 208) {
-          nonAuthUrls.splice(3, 1)
-          if (nonAuthUrls.find(elm => window.location.href.includes(elm))) {
+          dispatch(setLoading({ api: false }))
+
+          if (window.location.href.includes(`${window.location.origin}/login`) ||
+            window.location.href.includes(`${window.location.origin}/signup`) ||
+            window.location.href.includes(`${window.location.origin}/forgot`)) {
             navigate('/')
           }
         }
@@ -114,7 +110,7 @@ const App = () => {
         />
       </div>)}
 
-      {loading && <Loading />}
+      {loading?.site && <Loading />}
 
       {offline && <Error
         status={503}

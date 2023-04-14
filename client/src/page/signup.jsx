@@ -9,18 +9,18 @@ import './style.scss'
 const Signup = () => {
   const [pending, setPending] = useState(false)
   const { id } = useParams()
-  const { user } = useSelector((state) => state)
+  const { user, loading } = useSelector((state) => state)
   const dispatch = useDispatch()
   const path = window.location.pathname
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !loading?.api) {
       if (path === '/signup' || path === '/signup/') {
         setPending(false)
         setTimeout(() => {
-          dispatch(setLoading(false))
+          dispatch(setLoading({ site: false }))
         }, 1000)
       } else {
         const checkPending = async () => {
@@ -45,7 +45,7 @@ const Signup = () => {
             } else if (res) {
               setPending(true)
               setTimeout(() => {
-                dispatch(setLoading(false))
+                dispatch(setLoading({ site: false }))
               }, 1000)
             }
           }
@@ -54,7 +54,7 @@ const Signup = () => {
         checkPending()
       }
     }
-  }, [path, user])
+  }, [path, user, loading])
 
   return (
     <div className='Auth'>

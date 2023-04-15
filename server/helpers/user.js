@@ -362,9 +362,9 @@ export default {
         return new Promise((resolve, reject) => {
             db.collection(collections.USER).deleteOne({
                 _id: userId
-            }).then((res) => {
+            }).then(async (res) => {
                 if (res?.deletedCount > 0) {
-                    db.collection(collections.CHAT).deleteOne({
+                    await db.collection(collections.CHAT).deleteOne({
                         user: userId.toString()
                     }).catch((err) => {
                         console.log(err)

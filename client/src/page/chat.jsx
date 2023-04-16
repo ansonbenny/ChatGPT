@@ -78,7 +78,6 @@ const Main = () => {
                                 alert(err)
                             }
                         } finally {
-                            dispatch(setLoading({ site: false }))
                             if (res?.data) {
                                 dispatch(addList({ _id: id, items: res?.data?.data }))
                                 stateAction({ type: 'resume', status: false })
@@ -89,8 +88,8 @@ const Main = () => {
                     getSaved()
                 } else {
                     stateAction({ type: 'chat', status: false })
-                    dispatch(setLoading({ site: false }))
                 }
+                dispatch(setLoading({ site: false }))
             }, 1000)
         }
     }, [user, path, loading])

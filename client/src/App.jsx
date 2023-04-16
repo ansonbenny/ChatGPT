@@ -119,7 +119,7 @@ const App = () => {
 
       <Routes>
         <Route exact path="/" element={<Main />} />
-        <Route exact path="/chat" element={<Main />} />
+        <Route path="/chat" element={<Main />} />
         <Route path="/chat/:id" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/login/auth" element={<Login />} />

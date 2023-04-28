@@ -1,555 +1,560 @@
-@import '../index.scss';
+@import "../index.scss";
 
 @keyframes sendingDot2 {
-    0% {
-        background: transparent;
-    }
+  0% {
+    background: transparent;
+  }
 
-    50% {
-        background: #8E8E40;
-    }
+  50% {
+    background: #8e8e40;
+  }
 
-    100% {
-        background: #8E8E40;
-    }
+  100% {
+    background: #8e8e40;
+  }
 }
 
 @keyframes sendingDot3 {
-    0% {
-        background: transparent;
-    }
+  0% {
+    background: transparent;
+  }
 
-    50% {
-        background: transparent;
-    }
+  50% {
+    background: transparent;
+  }
 
-    100% {
-        background: #8E8E40;
-    }
+  100% {
+    background: #8e8e40;
+  }
 }
 
 .light {
+  .Error {
+    background: white;
 
-    .Error {
-        background: white;
-
-        .code {
-            color: $ColorBlack;
-            border-right: 1px solid $ColorBlack;
-        }
-
-        .txt {
-            color: $ColorBlack;
-        }
+    .code {
+      color: $ColorBlack;
+      border-right: 1px solid $ColorBlack;
     }
 
-    // input area
-    .inputArea {
-        background-image: linear-gradient(180deg, hsla(0, 0%, 100%, 0) 13.94%, #fff 54.73%);
-
-        @media screen and (max-width:767px) {
-            border-top: 1px solid #d9d9e3;
-            background-image: none;
-            background: rgba(255, 255, 255, 1);
-        }
-
-        .chatActionsLg button {
-            background: rgba(255, 255, 255, 1);
-            color: rgba(64, 65, 79, 1);
-            border: 1px solid rgba(0, 0, 0, .1);
-
-            svg {
-                color: rgba(64, 65, 79, 1);
-            }
-
-            &:hover {
-                background: rgba(236, 236, 241, 1);
-            }
-        }
-
-        .chatActionsMd button {
-            color: rgba(64, 65, 79, 1) !important;
-
-            &:hover {
-                background: rgba(236, 236, 241, 1) !important;
-            }
-        }
-
-        .box {
-            border: 1px solid rgba(0, 0, 0, .1);
-            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
-            background: #FFFFFF;
-
-            textarea {
-                color: #333;
-
-                &::-webkit-scrollbar-thumb {
-                    background: rgba(236, 236, 241, 1);
-                    border-radius: 30px;
-                }
-            }
-
-            button:hover {
-                background: #d9d9e3 !important;
-            }
-        }
-
-        .text {
-            //background: rgba(255, 255, 255, 1);
-            color: rgba(0, 0, 0, .5);
-
-            a {
-                color: rgba(0, 0, 0, .5);
-                text-decoration-color: rgba(0, 0, 0, .5);
-            }
-        }
-
-        .error p {
-            color: #000000;
-        }
+    .txt {
+      color: $ColorBlack;
     }
+  }
+
+  // input area
+  .inputArea {
+    background-image: linear-gradient(
+      180deg,
+      hsla(0, 0%, 100%, 0) 13.94%,
+      #fff 54.73%
+    );
+
+    @media screen and (max-width: 767px) {
+      border-top: 1px solid #d9d9e3;
+      background-image: none;
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .chatActionsLg button {
+      background: rgba(255, 255, 255, 1);
+      color: rgba(64, 65, 79, 1);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+
+      svg {
+        color: rgba(64, 65, 79, 1);
+      }
+
+      &:hover {
+        background: rgba(236, 236, 241, 1);
+      }
+    }
+
+    .chatActionsMd button {
+      color: rgba(64, 65, 79, 1) !important;
+
+      &:hover {
+        background: rgba(236, 236, 241, 1) !important;
+      }
+    }
+
+    .box {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+
+      textarea {
+        color: #333;
+
+        &::-webkit-scrollbar-thumb {
+          background: rgba(236, 236, 241, 1);
+          border-radius: 30px;
+        }
+      }
+
+      button:hover {
+        background: #d9d9e3 !important;
+      }
+    }
+
+    .text {
+      //background: rgba(255, 255, 255, 1);
+      color: rgba(0, 0, 0, 0.5);
+
+      a {
+        color: rgba(0, 0, 0, 0.5);
+        text-decoration-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    .error p {
+      color: #000000;
+    }
+  }
 }
 
 .dark {
+  .Error {
+    background: rgba(52, 53, 65, 1);
 
-    .Error {
-        background: rgba(52, 53, 65, 1);
-
-        .code {
-            border-right: 1px solid #D9D9E3;
-            color: #D9D9E3;
-        }
-
-        .txt {
-            color: #D9D9E3;
-        }
+    .code {
+      border-right: 1px solid #d9d9e3;
+      color: #d9d9e3;
     }
 
-    // input area
-    .inputArea {
-        background-image: linear-gradient(180deg, rgba(53, 55, 64, 0), #353740 58.85%);
-
-        @media screen and (max-width:767px) {
-            border-top: 1px solid hsla(0, 0%, 100%, .2);
-            background-image: none;
-            background: rgba(52, 53, 65, 1);
-        }
-
-        .chatActionsLg button {
-            color: #D9D9E3;
-            background-color: rgba(52, 53, 65, 1);
-            border: 1px solid rgba(86, 88, 105, 1);
-
-            svg {
-                color: #D9D9E3;
-            }
-
-            &:hover {
-                background: rgba(64, 65, 79, 1);
-            }
-        }
-
-        .chatActionsMd button {
-            color: white !important;
-
-            &:hover {
-                background: #40414f !important;
-            }
-        }
-
-        .box {
-            border: 1px solid rgba(32, 33, 35, .5);
-            box-shadow: 0 0 15px rgba(0, 0, 0, .1);
-            background: #40414f;
-
-            textarea {
-                color: white;
-
-                &::-webkit-scrollbar-thumb {
-                    background: rgba(86, 88, 105, 1);
-                    border-radius: 30px;
-                }
-            }
-
-            button:hover {
-                background: rgba(32, 33, 35, 1) !important;
-            }
-        }
-
-        .text {
-            //background: rgba(52, 53, 65, 1);
-            color: hsla(0, 0%, 100%, .5);
-
-            a {
-                color: hsla(0, 0%, 100%, .5);
-                text-decoration-color: hsla(0, 0%, 100%, .5);
-            }
-        }
-
-        .error p {
-            color: #FFFFFF;
-        }
+    .txt {
+      color: #d9d9e3;
     }
+  }
+
+  // input area
+  .inputArea {
+    background-image: linear-gradient(
+      180deg,
+      rgba(53, 55, 64, 0),
+      #353740 58.85%
+    );
+
+    @media screen and (max-width: 767px) {
+      border-top: 1px solid hsla(0, 0%, 100%, 0.2);
+      background-image: none;
+      background: rgba(52, 53, 65, 1);
+    }
+
+    .chatActionsLg button {
+      color: #d9d9e3;
+      background-color: rgba(52, 53, 65, 1);
+      border: 1px solid rgba(86, 88, 105, 1);
+
+      svg {
+        color: #d9d9e3;
+      }
+
+      &:hover {
+        background: rgba(64, 65, 79, 1);
+      }
+    }
+
+    .chatActionsMd button {
+      color: white !important;
+
+      &:hover {
+        background: #40414f !important;
+      }
+    }
+
+    .box {
+      border: 1px solid rgba(32, 33, 35, 0.5);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      background: #40414f;
+
+      textarea {
+        color: white;
+
+        &::-webkit-scrollbar-thumb {
+          background: rgba(86, 88, 105, 1);
+          border-radius: 30px;
+        }
+      }
+
+      button:hover {
+        background: rgba(32, 33, 35, 1) !important;
+      }
+    }
+
+    .text {
+      //background: rgba(52, 53, 65, 1);
+      color: hsla(0, 0%, 100%, 0.5);
+
+      a {
+        color: hsla(0, 0%, 100%, 0.5);
+        text-decoration-color: hsla(0, 0%, 100%, 0.5);
+      }
+    }
+
+    .error p {
+      color: #ffffff;
+    }
+  }
 }
 
 .Error {
-    position: fixed;
-    z-index: 4000;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+  position: fixed;
+  z-index: 4000;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+
+  .flex {
     height: 100%;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 
-    .flex {
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-
-        .code {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-right: 1.5rem;
-            height: 3rem;
-            margin-right: 1.5rem;
-            font-size: 24px;
-            font-weight: 500;
-        }
-
-        .txt {
-            font-size: 14px;
-            font-weight: normal;
-        }
+    .code {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-right: 1.5rem;
+      height: 3rem;
+      margin-right: 1.5rem;
+      font-size: 24px;
+      font-weight: 500;
     }
+
+    .txt {
+      font-size: 14px;
+      font-weight: normal;
+    }
+  }
 }
 
 .main {
-    width: 100%;
-    display: block;
-    position: relative;
+  width: 100%;
+  display: block;
+  position: relative;
 
-    .contentArea {
-        height: auto;
-        align-items: center;
-        text-align: center;
+  .contentArea {
+    height: auto;
+    align-items: center;
+    text-align: center;
+  }
+
+  .inputArea {
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    height: auto;
+    min-height: 17%;
+    width: calc(100vw - 260px) !important;
+
+    @media screen and (max-width: 767px) {
+      width: 100% !important;
     }
 
-    .inputArea {
-        position: fixed;
-        z-index: 1000;
-        bottom: 0;
-        height: auto;
-        min-height: 17%;
-        width: calc(100vw - 260px) !important;
+    .chatActionsLg {
+      padding-top: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        @media screen and (max-width:767px) {
-            width: 100% !important;
+      button {
+        position: relative;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        padding: 0.5rem 0.75rem;
+        padding-left: 1.85rem;
+        border-radius: 3px;
+        cursor: pointer;
+
+        svg {
+          left: 0.75rem;
+          padding-top: 0.25rem;
+          position: absolute;
+          width: 0.75rem;
+          height: 0.75rem;
         }
+      }
 
-        .chatActionsLg {
-            padding-top: 0.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
 
-            button {
-                position: relative;
-                font-size: .875rem;
-                line-height: 1.25rem;
-                padding: .5rem .75rem;
-                padding-left: 1.85rem;
-                border-radius: 3px;
-                cursor: pointer;
+    .flexBody {
+      display: flex;
+      flex-direction: row;
+      padding-left: 10em;
+      padding-right: 10em;
+      padding-top: 0.5em;
+      background: transparent;
 
-                svg {
-                    left: .75rem;
-                    padding-top: .25rem;
-                    position: absolute;
-                    width: .75rem;
-                    height: .75rem;
-                }
-            }
+      @media only screen and (max-width: 1300px) {
+        padding-left: 3em;
+        padding-right: 3em;
+      }
 
-            @media screen and (max-width:767px) {
-                display: none;
-            }
-        }
+      @media only screen and (max-width: 1000px) {
+        padding-left: 1em;
+        padding-right: 1em;
+      }
 
-        .flexBody {
-            display: flex;
-            flex-direction: row;
-            padding-left: 10em;
-            padding-right: 10em;
-            padding-top: 0.5em;
+      @media only screen and (max-width: 767px) {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+      }
+
+      .chatActionsMd {
+        display: none;
+
+        @media only screen and (max-width: 767px) {
+          display: block;
+          padding-left: 0.5em;
+
+          button {
+            padding: 0 1rem;
+            height: 100%;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
             background: transparent;
+          }
+        }
+      }
 
-            @media only screen and (max-width: 1300px) {
-                padding-left: 3em;
-                padding-right: 3em;
-            }
+      .box {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        border-radius: 0.375rem;
+        padding-top: 1rem;
 
-            @media only screen and (max-width: 1000px) {
-                padding-left: 1em;
-                padding-right: 1em;
-            }
+        textarea {
+          outline: none;
+          border-bottom-left-radius: 0.375rem;
+          border-top-left-radius: 0.375rem;
+          width: 100%;
+          height: 30px;
+          outline: none;
+          border: none;
+          padding-left: 1rem;
+          padding-right: calc(9% + 2px);
+          background: transparent;
+          resize: none;
+          font-weight: normal;
+          overflow-y: auto;
+          max-height: 12em;
 
-            @media only screen and (max-width: 767px) {
-                padding-left: .5em;
-                padding-right: .5em;
-            }
+          &::-webkit-scrollbar {
+            width: 8px;
+          }
 
-            .chatActionsMd {
-                display: none;
-
-                @media only screen and (max-width: 767px) {
-                    display: block;
-                    padding-left: .5em;
-
-                    button {
-                        padding: 0 1rem;
-                        height: 100%;
-                        border-radius: .25rem;
-                        font-size: .875rem;
-                        cursor: pointer;
-                        border: none;
-                        background: transparent;
-                    }
-                }
-            }
-
-            .box {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                position: relative;
-                border-radius: .375rem;
-                padding-top: 1rem;
-
-                textarea {
-                    outline: none;
-                    border-bottom-left-radius: .375rem;
-                    border-top-left-radius: .375rem;
-                    width: 100%;
-                    height: 30px;
-                    outline: none;
-                    border: none;
-                    padding-left: 1rem;
-                    padding-right: calc(9% + 2px);
-                    background: transparent;
-                    resize: none;
-                    font-weight: normal;
-                    overflow-y: auto;
-                    max-height: 12em;
-
-                    &::-webkit-scrollbar {
-                        width: 8px;
-                    }
-
-                    &::-webkit-scrollbar-track {
-                        background: transparent;
-                    }
-                }
-
-                textArea::placeholder{
-                    font-size: 16px;
-                }
-
-                button {
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
-                    border: none;
-                    outline: none;
-                    background: transparent;
-                    padding: .25rem;
-                    border-radius: .375rem;
-                    margin-right: 10px;
-                    margin-bottom: 5px;
-                    cursor: pointer;
-
-                    svg {
-                        width: 16px;
-                        height: 16px;
-                        color: rgba(142, 142, 160, 1);
-                    }
-                }
-
-                .loading {
-                    display: flex;
-                    gap: 2px;
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
-                    background: transparent;
-                    padding: .25rem;
-                    margin-right: 10px;
-                    margin-bottom: 1rem;
-
-                    .dot {
-                        width: 3px;
-                        height: 3px;
-                        background: #8E8E40;
-                        border-radius: 50%;
-                        border: none;
-                    }
-
-                    .dot-2 {
-                        animation: sendingDot2 1s ease-in-out infinite;
-                    }
-
-                    .dot-3 {
-                        animation: sendingDot3 1s ease-in-out infinite;
-                    }
-                }
-
-            }
+          &::-webkit-scrollbar-track {
+            background: transparent;
+          }
         }
 
-        .error {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-            p {
-                font-size: .75rem;
-                line-height: 1rem;
-                margin-top: .5rem;
-                margin-bottom: .5rem;
-            }
-
-            button {
-                position: relative;
-                font-size: .875rem;
-                line-height: 1.25rem;
-                padding: .5rem .75rem;
-                padding-left: 1.85rem;
-                border-radius: .25rem;
-                cursor: pointer;
-                background: rgba(16, 163, 127, 1);
-                color: rgba(255, 255, 255, 1);
-                border: none;
-
-                svg {
-                    left: .75rem;
-                    padding-top: .25rem;
-                    position: absolute;
-                    width: .75rem;
-                    height: .75rem;
-                    color: rgba(255, 255, 255, 1);
-                }
-
-                &:hover {
-                    background: rgba(26, 127, 100, 1);
-                }
-            }
+        textArea::placeholder {
+          font-size: 16px;
         }
 
-        .text {
-            padding-top: 0.75rem;
-            padding-bottom: 1.5rem;
-            padding-left: 7rem;
-            padding-right: 7rem;
-            font-size: .75rem;
-            line-height: 1rem;
+        button {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          border: none;
+          outline: none;
+          background: transparent;
+          padding: 0.25rem;
+          border-radius: 0.375rem;
+          margin-right: 10px;
+          margin-bottom: 5px;
+          cursor: pointer;
 
-            a {
-                font-size: .75rem;
-            }
-
-            @media screen and (max-width:1300px) {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
+          svg {
+            width: 16px;
+            height: 16px;
+            color: rgba(142, 142, 160, 1);
+          }
         }
+
+        .loading {
+          display: flex;
+          gap: 2px;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          background: transparent;
+          padding: 0.25rem;
+          margin-right: 10px;
+          margin-bottom: 1rem;
+
+          .dot {
+            width: 3px;
+            height: 3px;
+            background: #8e8e40;
+            border-radius: 50%;
+            border: none;
+          }
+
+          .dot-2 {
+            animation: sendingDot2 1s ease-in-out infinite;
+          }
+
+          .dot-3 {
+            animation: sendingDot3 1s ease-in-out infinite;
+          }
+        }
+      }
     }
+
+    .error {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      p {
+        font-size: 0.75rem;
+        line-height: 1rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      button {
+        position: relative;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        padding: 0.5rem 0.75rem;
+        padding-left: 1.85rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        background: rgba(16, 163, 127, 1);
+        color: rgba(255, 255, 255, 1);
+        border: none;
+
+        svg {
+          left: 0.75rem;
+          padding-top: 0.25rem;
+          position: absolute;
+          width: 0.75rem;
+          height: 0.75rem;
+          color: rgba(255, 255, 255, 1);
+        }
+
+        &:hover {
+          background: rgba(26, 127, 100, 1);
+        }
+      }
+    }
+
+    .text {
+      padding-top: 0.75rem;
+      padding-bottom: 1.5rem;
+      padding-left: 7rem;
+      padding-right: 7rem;
+      font-size: 0.75rem;
+      line-height: 1rem;
+
+      a {
+        font-size: 0.75rem;
+      }
+
+      @media screen and (max-width: 1300px) {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+  }
 }
 
 .Auth {
-    display: block;
-    position: fixed;
-    z-index: 1000;
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  background: white;
+  color: #000000;
+
+  .inner {
+    display: flex;
     height: 100%;
     width: 100%;
-    background: white;
-    color: #000000;
+    flex-direction: column;
+    overflow-y: auto;
 
-    .inner {
+    .suggection {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+
+      .btns {
         display: flex;
-        height: 100%;
-        width: 100%;
-        flex-direction: column;
-        overflow-y: auto;
+        flex-direction: row;
+        gap: 10px;
+        margin-top: 0.5rem;
 
-        .suggection {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        button {
+          width: 5em;
+          height: 3em;
+          text-align: center;
+          background: rgba(16, 163, 127, 1);
+          color: rgba(255, 255, 255, 1);
+          border-radius: 0.25rem;
+          border: none;
+          cursor: pointer;
+          transition: all 0.1s ease-in-out;
+          -moz-transition: all 0.1s ease-in-out;
 
-            svg {
-                margin-bottom: .5rem;
-            }
-
-            p {
-                text-align: center;
-                margin-bottom: .5rem;
-            }
-
-            .btns {
-                display: flex;
-                flex-direction: row;
-                gap: 10px;
-                margin-top: .5rem;
-
-                button {
-                    width: 5em;
-                    height: 3em;
-                    text-align: center;
-                    background: rgba(16, 163, 127, 1);
-                    color: rgba(255, 255, 255, 1);
-                    border-radius: .25rem;
-                    border: none;
-                    cursor: pointer;
-                    transition: all .1s ease-in-out;
-                    -moz-transition: all .1s ease-in-out;
-
-                    &:hover {
-                        background: rgba(26, 127, 100, 1);
-                    }
-                }
-            }
+          &:hover {
+            background: rgba(26, 127, 100, 1);
+          }
         }
-
-        .bottum {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            padding: 1rem 0;
-            align-items: center;
-            justify-content: center;
-
-            a {
-                text-decoration: none;
-                color: rgba($color: #000000, $alpha: .5);
-            }
-
-            .start {
-                padding-right: .5rem;
-                font-size: .75rem;
-                border-right: 1px solid rgba($color: #000000, $alpha: .7);
-            }
-
-            .end {
-                padding-left: .5rem;
-                font-size: .75rem;
-            }
-        }
+      }
     }
 
+    .bottum {
+      margin-top: auto;
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      padding: 1rem 0;
+      align-items: center;
+      justify-content: center;
+
+      a {
+        text-decoration: none;
+        color: rgba($color: #000000, $alpha: 0.5);
+      }
+
+      .start {
+        padding-right: 0.5rem;
+        font-size: 0.75rem;
+        border-right: 1px solid rgba($color: #000000, $alpha: 0.7);
+      }
+
+      .end {
+        padding-left: 0.5rem;
+        font-size: 0.75rem;
+      }
+    }
+  }
 }

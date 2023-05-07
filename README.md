@@ -7,9 +7,9 @@ This clone is made with MERN and uses OpenAI API.
 
 Make sure you have installed all of the following prerequisites on your development machine:
 
--Node Js & Npm [Download and Install](https://nodejs.org/en)
--MongoDB [Download and Install](https://www.mongodb.com/docs/manual/installation/)
--Git [Download and Install](https://git-scm.com/downloads)
+- Node Js & Npm [Download and Install](https://nodejs.org/en)
+- MongoDB [Download and Install](https://www.mongodb.com/docs/manual/installation/)
+- Git [Download and Install](https://git-scm.com/downloads)
 
 ## Technology Used
 

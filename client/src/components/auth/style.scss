@@ -305,9 +305,13 @@
                 position: relative;
 
                 input {
-                    width: calc(100% - (4rem + 17px));
+                    width: calc((18rem + 16px) - 4rem);
                     padding-left: 16px;
                     padding-right: 4rem;
+
+                    @media screen and (max-width:340px) {
+                        width: calc((100%) - (4rem + 16px));
+                    }
                 }
 
                 button {

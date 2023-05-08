@@ -17,6 +17,8 @@ Make sure you have installed all of the following prerequisites on your developm
 
 #nodejs #expressjs #mongodb #jsonwebtoken authentication 
 
+#javascript
+
 #openai #chatgpt
 
 

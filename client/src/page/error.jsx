@@ -8,7 +8,7 @@ const Error = ({ status, content }) => {
 
     useEffect(() => {
         setTimeout(() => {
-            dispatch(setLoading(false))
+            dispatch(setLoading({ site: false }))
         }, 1000)
     }, [])
     return (

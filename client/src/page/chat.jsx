@@ -75,11 +75,13 @@ const Main = () => {
               navigate("/404");
             } else {
               alert(err);
+              dispatch(setLoading({ site: false }));
             }
           } finally {
             if (res?.data) {
               dispatch(addList({ _id: id, items: res?.data?.data }));
               stateAction({ type: "resume", status: false });
+              dispatch(setLoading({ site: false }));
             }
           }
         };
@@ -87,8 +89,8 @@ const Main = () => {
         getSaved();
       } else {
         stateAction({ type: "chat", status: false });
+        dispatch(setLoading({ site: false }));
       }
-      dispatch(setLoading({ site: false }));
     }, 1000);
   }, [path, loading]);
 

@@ -51,7 +51,11 @@ const ProtectedRoute = ({ offline, authed }) => {
     }
   }, [location]);
 
-  return !loading?.api && user ? authed && <Outlet /> : !authed && <Outlet />;
+  return loading?.api === false
+    ? user
+      ? authed && <Outlet />
+      : !authed && <Outlet />
+    : null;
 };
 
 export default ProtectedRoute;

@@ -1,9 +1,25 @@
 # ChatGPT
 This clone is made with MERN and uses OpenAI API.
 
-- get your api key from https://openai.com/api/
+This project is clone of chatGPT , chatGPT is an AI . It's allows you to have human-like conversations.
+
+## Features
+
+- PWA
+- Offline
+- Password login
+- Forgot password
+- Google login & signup
+- Chat 
+- Auto chat save
+- History Save
+- Account delete option
+- Light & Dark mode
+- Responsive Design
 
 ## Prerequisites
+
+- get your api key from https://openai.com/api/
 
 Make sure you have installed all of the following prerequisites on your development machine:
 
@@ -20,21 +36,6 @@ Make sure you have installed all of the following prerequisites on your developm
 #javascript
 
 #openai #chatgpt
-
-
-## Features
-
-- PWA
-- Offline
-- Password login
-- Forgot password
-- Google login & signup
-- Chat 
-- Auto chat save
-- History Save
-- Account delete option
-- Light & Dark mode
-- Responsive Design
 
 ## Environment Variables
 

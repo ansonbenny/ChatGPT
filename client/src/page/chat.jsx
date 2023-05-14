@@ -47,6 +47,8 @@ const Main = () => {
 
   const chatRef = useRef();
 
+  const { user } = useSelector((state) => state);
+
   const { id = null } = useParams();
 
   const [status, stateAction] = useReducer(reducer, {
@@ -56,40 +58,42 @@ const Main = () => {
   });
 
   useEffect(() => {
-    dispatch(emptyAllRes());
-    setTimeout(() => {
-      if (id) {
-        const getSaved = async () => {
-          let res = null;
-          try {
-            res = await instance.get("/api/chat/saved", {
-              params: {
-                chatId: id,
-              },
-            });
-          } catch (err) {
-            console.log(err);
-            if (err?.response?.data?.status === 404) {
-              navigate("/404");
-            } else {
-              alert(err);
-              dispatch(setLoading(false));
+    if (user) {
+      dispatch(emptyAllRes());
+      setTimeout(() => {
+        if (id) {
+          const getSaved = async () => {
+            let res = null;
+            try {
+              res = await instance.get("/api/chat/saved", {
+                params: {
+                  chatId: id,
+                },
+              });
+            } catch (err) {
+              console.log(err);
+              if (err?.response?.data?.status === 404) {
+                navigate("/404");
+              } else {
+                alert(err);
+                dispatch(setLoading(false));
+              }
+            } finally {
+              if (res?.data) {
+                dispatch(addList({ _id: id, items: res?.data?.data }));
+                stateAction({ type: "resume", status: false });
+                dispatch(setLoading(false));
+              }
             }
-          } finally {
-            if (res?.data) {
-              dispatch(addList({ _id: id, items: res?.data?.data }));
-              stateAction({ type: "resume", status: false });
-              dispatch(setLoading(false));
-            }
-          }
-        };
+          };
 
-        getSaved();
-      } else {
-        stateAction({ type: "chat", status: false });
-        dispatch(setLoading(false));
-      }
-    }, 1000);
+          getSaved();
+        } else {
+          stateAction({ type: "chat", status: false });
+          dispatch(setLoading(false));
+        }
+      }, 1000);
+    }
   }, [location]);
 
   return (

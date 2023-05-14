@@ -2,21 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 let loadingSlice = createSlice({
     name: 'loading',
-    initialState: {
-        site: true,
-        api: true
-    },
+    initialState: true,
     reducers: ({
         setLoading: (state, { payload }) => {
-            if (payload.site === false ||
-                payload.site === true) {
-                state.site = payload.site
-            }
-
-            if (payload.api === false ||
-                payload.api === true) {
-                state.api = payload.api
-            }
+            state = payload
             return state
         }
     })

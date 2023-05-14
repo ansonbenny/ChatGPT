@@ -1,58 +1,67 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ForgotComponent } from "../components";
 import instance from "../config/instance";
 import { setLoading } from "../redux/loading";
 import "./style.scss";
 
 const Forgot = () => {
-  const { userId = null, secret = null } = useParams();
-  const { loading } = useSelector((state) => state);
+  const { user } = useSelector((state) => state);
 
-  const path = window.location.pathname;
+  const { userId = null, secret = null } = useParams();
+
+  const location = useLocation();
+
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
+
   const [isRequest, setIsRequest] = useState(true);
 
   useEffect(() => {
-    if (path === "/forgot/" || path === "/forgot") {
-      setIsRequest(true);
-      setTimeout(() => {
-        dispatch(setLoading({ site: false }));
-      }, 1000);
-    } else {
-      const getResponse = async () => {
-        let res = null;
+    if (!user) {
+      if (
+        location?.pathname === "/forgot/" ||
+        location?.pathname === "/forgot"
+      ) {
+        setIsRequest(true);
+        setTimeout(() => {
+          dispatch(setLoading(false));
+        }, 1000);
+      } else {
+        const getResponse = async () => {
+          let res = null;
 
-        try {
-          res = await instance.get("/api/user/forgot-check", {
-            params: {
-              userId,
-              secret,
-            },
-          });
-        } catch (err) {
-          console.log(err);
-          if (err?.response?.status === 404) {
-            navigate("/404");
-          } else {
-            alert(err);
-            navigate("/forgot");
+          try {
+            res = await instance.get("/api/user/forgot-check", {
+              params: {
+                userId,
+                secret,
+              },
+            });
+          } catch (err) {
+            console.log(err);
+            if (err?.response?.status === 404) {
+              navigate("/404");
+            } else {
+              alert(err);
+              navigate("/forgot");
+            }
+          } finally {
+            if (res?.data?.status !== 208) {
+              setIsRequest(false);
+              setTimeout(() => {
+                dispatch(setLoading(false));
+              }, 1000);
+            }
           }
-        } finally {
-          if (res?.data?.status !== 208) {
-            setIsRequest(false);
-            setTimeout(() => {
-              dispatch(setLoading({ site: false }));
-            }, 1000);
-          }
-        }
-      };
+        };
 
-      getResponse();
+        getResponse();
+      }
     }
-  }, [path, loading]);
+  }, [location]);
 
   return (
     <div className="Auth">

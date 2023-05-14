@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef } from "react";
 import { Reload, Rocket, Stop } from "../assets";
 import { Chat, New } from "../components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { setLoading } from "../redux/loading";
 import { useDispatch, useSelector } from "react-redux";
 import { addList, emptyAllRes, insertNew, livePrompt } from "../redux/messages";
@@ -39,7 +39,7 @@ const reducer = (state, { type, status }) => {
 };
 
 const Main = () => {
-  let path = window.location.pathname;
+  let location = useLocation();
 
   const navigate = useNavigate();
 
@@ -48,8 +48,6 @@ const Main = () => {
   const chatRef = useRef();
 
   const { id = null } = useParams();
-
-  const { loading } = useSelector((state) => state);
 
   const [status, stateAction] = useReducer(reducer, {
     chat: false,
@@ -75,13 +73,13 @@ const Main = () => {
               navigate("/404");
             } else {
               alert(err);
-              dispatch(setLoading({ site: false }));
+              dispatch(setLoading(false));
             }
           } finally {
             if (res?.data) {
               dispatch(addList({ _id: id, items: res?.data?.data }));
               stateAction({ type: "resume", status: false });
-              dispatch(setLoading({ site: false }));
+              dispatch(setLoading(false));
             }
           }
         };
@@ -89,10 +87,10 @@ const Main = () => {
         getSaved();
       } else {
         stateAction({ type: "chat", status: false });
-        dispatch(setLoading({ site: false }));
+        dispatch(setLoading(false));
       }
     }, 1000);
-  }, [path, loading]);
+  }, [location]);
 
   return (
     <div className="main">

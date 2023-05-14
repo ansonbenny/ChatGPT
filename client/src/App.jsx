@@ -53,7 +53,7 @@ const App = () => {
         </div>
       )}
 
-      {loading?.site && <Loading />}
+      {loading && <Loading />}
 
       {offline && (
         <Error

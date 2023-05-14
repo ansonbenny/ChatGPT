@@ -1,33 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { GptIcon } from "../assets";
 import { LoginComponent } from "../components";
 import { setLoading } from "../redux/loading";
 import "./style.scss";
 
 const Login = () => {
+  const location = useLocation();
+
   const [auth, setAuth] = useState(false);
-  const { loading } = useSelector((state) => state);
+
+  const { user } = useSelector((state) => state);
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const path = window.location.pathname;
-
   useEffect(() => {
-    if (path === "/login/auth") {
-      setAuth(true);
-      setTimeout(() => {
-        dispatch(setLoading({ site: false }));
-      }, 1000);
-    } else {
-      setAuth(false);
-      setTimeout(() => {
-        dispatch(setLoading({ site: false }));
-      }, 1000);
+    if (!user) {
+      if (location?.pathname === "/login/auth") {
+        setAuth(true);
+        setTimeout(() => {
+          dispatch(setLoading(false));
+        }, 1000);
+      } else {
+        setAuth(false);
+        setTimeout(() => {
+          dispatch(setLoading(false));
+        }, 1000);
+      }
     }
-  }, [path, loading]);
+  }, [location]);
 
   return (
     <div className="Auth">
